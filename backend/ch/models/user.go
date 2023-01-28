@@ -1,4 +1,4 @@
-package ch
+package models
 
 import "net/mail"
 

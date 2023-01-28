@@ -1,8 +1,8 @@
-package ch
+package models
 
 type Card struct {
-	Owner    User
-	Contents string
+	Owner    User   `json:"-"`
+	Contents string `json:"contents,omitempty"`
 }
 
 func NewCard(owner User, contents string) Card {
