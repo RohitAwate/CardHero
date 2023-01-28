@@ -1,13 +1,16 @@
 import {Component} from "react";
 import axios from "axios";
+import LogItem from "./LogItem";
+
+import "./Log.css";
 
 class Log extends Component {
     render() {
         if (this.state) {
-            return <div>
+            return <div id="log-pane">
                 {
                     this.state.logs.map(card => {
-                        return <h2 key={card.id}>{card.contents}</h2>
+                        return <LogItem card={card}/>
                     })
                 }
             </div>;

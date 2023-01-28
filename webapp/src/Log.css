@@ -1,0 +1,7 @@
+#log-pane {
+    max-width: 30%;
+    background-color: #5c7855;
+
+    display: flex;
+    flex-direction: column;
+}
