@@ -17,7 +17,7 @@ class Log extends Component {
                 </div>
                 <div id="log-input-container">
                     <form id="log-input-form">
-                        <input type="text" id="log-input-text" placeholder="Type a message" />
+                        <div contentEditable="true" id="log-input-text" placeholder="Type a message"></div>
                         <button id="log-send-btn"><img src="/icons/send-plane-48.png"  alt="send-icon"/></button>
                     </form>
                 </div>

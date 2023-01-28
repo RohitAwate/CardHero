@@ -35,6 +35,18 @@
     margin: 0 5px;
 
     font-size: 1em;
+
+    background-color: white;
+}
+
+[contenteditable=true]:empty:before {
+    content: attr(placeholder);
+    color: grey;
+    pointer-events: none;
+}
+
+#log-input-text:focus {
+    outline: none;
 }
 
 #log-send-btn {

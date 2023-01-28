@@ -1,0 +1,7 @@
+- textbox:
+    - expand on shift + enter for multiline input
+    - emoji panel on pressing colon and some text
+- chat bubbles
+    - corner tab
+    - grouping with reduced margin
+    - grouping with no corner tab
