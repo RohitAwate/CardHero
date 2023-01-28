@@ -5,6 +5,6 @@ type Card struct {
 	Contents string
 }
 
-func NewCard(owner User, contents string) Card {
+func newCard(owner User, contents string) Card {
 	return Card{Owner: owner, Contents: contents}
 }

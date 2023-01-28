@@ -14,5 +14,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(ch.NewCard(*rohit, "hello, world!"))
+	rohitLog := ch.NewLog(*rohit)
+	fmt.Println(rohitLog)
 }
