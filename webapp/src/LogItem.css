@@ -1,6 +1,6 @@
 .log-item {
     min-width: 300px;
-    max-width: 500px;
+    max-width: 80%;
     border-radius: 10px;
 
     margin: 5px;
@@ -10,7 +10,7 @@
     align-self: flex-end;
 
     /* x-offset y-offset blur-radius color */
-    box-shadow: 1px 1px 2px #365032;
+    box-shadow: 1px 1px 4px #4f6c4b;
 }
 
 .log-item-contents {

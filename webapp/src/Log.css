@@ -1,6 +1,15 @@
-#log-pane {
+#log-container {
     max-width: 30%;
-    background-color: #5c7855;
+    height: 90vh;
+    background-color: #8faf83;
+
+    display: flex;
+
+    padding: 10px 20px;
+}
+
+#log-pane {
+    align-self: flex-end;
 
     display: flex;
     flex-direction: column;

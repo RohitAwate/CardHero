@@ -7,12 +7,14 @@ import "./Log.css";
 class Log extends Component {
     render() {
         if (this.state) {
-            return <div id="log-pane">
-                {
-                    this.state.logs.map(card => {
-                        return <LogItem card={card}/>
-                    })
-                }
+            return <div id="log-container">
+                <div id="log-pane">
+                    {
+                        this.state.logs.map(card => {
+                            return <LogItem card={card}/>
+                        })
+                    }
+                </div>
             </div>;
         } else {
             return <h1>Add something to the log!</h1>;
