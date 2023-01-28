@@ -16,4 +16,8 @@ func main() {
 
 	rohitLog := ch.NewLog(*rohit)
 	fmt.Println(rohitLog)
+
+	card := ch.NewCard(*rohit, "hello, world!")
+	rohitLog.Append(&card)
+	fmt.Println(rohitLog)
 }
