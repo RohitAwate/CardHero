@@ -15,7 +15,7 @@ func GetUserLogs(w http.ResponseWriter, r *http.Request) {
 	clog := models.NewCardLog(*user)
 	card1 := models.NewCard(*user, "https://www.youtube.com/watch?v=ErfnhcEV1O8\n\nexplanation of entropy, softmax, cross-entropy\nweather example\nshannon encoding wala manus")
 	card2 := models.NewCard(*user, "Beautiful review of banshees of inisherin\nhttps://dmtalkies.com/the-banshees-of-inisherin-ending-explained-2022-film-martin-mcdonagh/")
-	card3 := models.NewCard(*user, "Beautiful review of banshees of inisherin\nhttps://dmtalkies.com/the-banshees-of-inisherin-ending-explained-2022-film-martin-mcdonagh/")
+	card3 := models.NewCard(*user, "https://www.mpb.com/en-us/product/sigma-18-200mm-f-3-5-6-3-dc-os-hsm-canon-ef-s-fit/sku-1777227\n\n\nGood Sigma lens for Canon 600D")
 	clog.Append(&card1, &card2, &card3)
 
 	json, err := clog.JSON()

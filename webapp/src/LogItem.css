@@ -10,11 +10,12 @@
     align-self: flex-end;
 
     /* x-offset y-offset blur-radius color */
-    box-shadow: 1px 1px 4px #4f6c4b;
+    box-shadow: 1px 1px 5px #81987f;
 }
 
 .log-item-contents {
     padding: 0 5px;
+    white-space: pre-line;
 }
 
 .log-item-timestamp {

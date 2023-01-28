@@ -15,6 +15,12 @@ class Log extends Component {
                         })
                     }
                 </div>
+                <div id="log-input-container">
+                    <form id="log-input-form">
+                        <input type="text" id="log-input-text" placeholder="Type a message" />
+                        <button id="log-send-btn"><img src="/icons/send-plane-48.png"  alt="send-icon"/></button>
+                    </form>
+                </div>
             </div>;
         } else {
             return <h1>Add something to the log!</h1>;

@@ -1,3 +1,7 @@
 * {
     font-family: sans-serif;
 }
+
+textarea:focus, input:focus{
+    outline: none;
+}

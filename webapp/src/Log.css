@@ -1,16 +1,48 @@
 #log-container {
     max-width: 30%;
     height: 90vh;
-    background-color: #8faf83;
+    background-color: #b6d0aa;
 
     display: flex;
-
-    padding: 10px 20px;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 #log-pane {
+    padding: 10px 20px;
+
     align-self: flex-end;
 
     display: flex;
     flex-direction: column;
+}
+
+#log-input-container {
+    background-color: #e0e6ef;
+    padding: 10px;
+}
+
+#log-input-form {
+    display: flex;
+    vertical-align: center;
+}
+
+#log-input-text {
+    border: none;
+    border-radius: 10px;
+    width: 90%;
+    padding: 10px;
+    margin: 0 5px;
+
+    font-size: 1em;
+}
+
+#log-send-btn {
+    border: none;
+    background-color: transparent;
+}
+
+#log-send-btn > img {
+    opacity: 0.4;
+    width: 30px;
 }
