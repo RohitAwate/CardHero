@@ -1,7 +1,8 @@
 #log-container {
     max-width: 30%;
     height: 90vh;
-    background-color: #b6d0aa;
+    background-image: url("/public/backgrounds/white-painted-wall.jpg");
+    background-size: cover;
 
     display: flex;
     flex-direction: column;
@@ -15,10 +16,12 @@
 
     display: flex;
     flex-direction: column;
+
+    overflow-y: auto;
 }
 
 #log-input-container {
-    background-color: #e0e6ef;
+    background-color: #eaeef6;
     padding: 10px;
 }
 
@@ -31,18 +34,19 @@
     border: none;
     border-radius: 10px;
     width: 90%;
+    /*max-width: 90%;*/
     padding: 10px;
     margin: 0 5px;
-
     font-size: 1em;
-
     background-color: white;
+    word-break: break-word;
 }
 
-[contenteditable=true]:empty:before {
+#log-input-text:empty:before {
     content: attr(placeholder);
     color: grey;
     pointer-events: none;
+    display: block; /*  For Firefox  */
 }
 
 #log-input-text:focus {
