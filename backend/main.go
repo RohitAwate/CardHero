@@ -1,6 +1,8 @@
 package main
 
-import "CardHero/api"
+import (
+	"CardHero/api"
+)
 
 func main() {
 	server := api.NewServer(8080)

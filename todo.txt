@@ -5,3 +5,6 @@
     - corner tab
     - grouping with reduced margin
     - grouping with no corner tab
+- input validation
+    - user
+    - card

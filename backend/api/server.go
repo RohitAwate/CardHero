@@ -16,8 +16,9 @@ type Server struct {
 func NewServer(port uint) Server {
 	router := chi.NewRouter()
 	router.Route("/api", func(api chi.Router) {
-		api.Route("/{username:[a-z1-2_]+}", func(username chi.Router) {
-			username.Get("/logs", handlers.GetUserLogs)
+		api.Route("/{username:[a-z1-2_]+}/logs", func(username chi.Router) {
+			username.Get("/", handlers.GetCards)
+			username.Post("/", handlers.AppendCard)
 		})
 	})
 
