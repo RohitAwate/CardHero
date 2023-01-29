@@ -12,15 +12,19 @@ class MultiLineInput extends Component {
     }
 
     onInput = (event) => {
-        if (event.target.innerHTML.trim() === '<div><br></div>') {
-            event.target.innerHTML = "";
+        if (!this.allowedWhitespace && event.target.innerText.trim() === '') {
+            event.target.innerText = "";
         }
 
-        this.inputValue = event.target.innerHTML;
+        this.inputValue = event.target.innerText;
     }
 
     onSubmit = (event) => {
-        if ((event.metaKey || event.ctrlKey) && event.which === 13) {
+        this.allowedWhitespace = false;
+
+        if (event.shiftKey && event.which === 13) {
+            this.allowedWhitespace = true;
+        } else if ((event.metaKey || event.ctrlKey) && event.which === 13) {
             this.props.onSubmit(event);
         }
     }
