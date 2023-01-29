@@ -3,7 +3,7 @@ import axios from "axios";
 import LogItem from "./LogItem";
 
 import "./Log.css";
-import MultiLineInputField from "./MultiLineInputField";
+import MultiLineInput from "./MultiLineInput";
 
 class Log extends Component {
     DEFAULT_CARD = {
@@ -21,6 +21,7 @@ class Log extends Component {
     onSubmit = async (event) => {
         event.preventDefault();
         const contents = this.inputRef.current.value();
+        console.log(contents);
         if (contents.trim() === "") return;
 
         const payload = new URLSearchParams();
@@ -56,10 +57,11 @@ class Log extends Component {
             </div>
             <div id="log-input-container">
                 <form id="log-input-form" onSubmit={this.onSubmit}>
-                    <MultiLineInputField
+                    <MultiLineInput
                         id="log-input-text"
                         ref={this.inputRef}
                         placeholder="Type a message"
+                        onSubmit={this.onSubmit}
                     />
                     <button id="log-send-btn"><img src="/icons/send-plane-48.png" alt="send-icon"/></button>
                 </form>
