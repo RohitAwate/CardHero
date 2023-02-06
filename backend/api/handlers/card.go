@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"CardHero/db"
 	"CardHero/models"
 	"encoding/json"
 	"fmt"
@@ -11,13 +12,13 @@ import (
 
 func GetCards(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
-	user, err := models.FetchUser(username)
+	user, err := db.GetUser(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	cards, err := models.GetCardsBy(*user)
+	cards, err := db.GetCardsBy(*user)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -53,14 +54,14 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 
 	timestamp, _ := time.Parse(time.RFC3339, timestampStr)
 
-	user, err := models.FetchUser(username)
+	user, err := db.GetUser(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	card := models.NewCard(*user, contents, timestamp)
-	models.SaveCard(card)
+	db.SaveCard(card)
 
 	cardJson, err := json.Marshal(card)
 	if err != nil {

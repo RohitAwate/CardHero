@@ -39,6 +39,6 @@ func init() {
 	log.Println("Database initialized")
 }
 
-func GetConn() *gorm.DB {
+func getConn() *gorm.DB {
 	return database
 }
