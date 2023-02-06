@@ -18,7 +18,7 @@ func NewServer(port uint) Server {
 	router.Route("/api", func(api chi.Router) {
 		api.Route("/{username:[a-z1-2_]+}/logs", func(username chi.Router) {
 			username.Get("/", handlers.GetCards)
-			username.Post("/", handlers.AppendCard)
+			username.Post("/", handlers.AddCard)
 		})
 	})
 

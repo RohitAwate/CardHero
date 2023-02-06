@@ -45,7 +45,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func AppendCard(w http.ResponseWriter, r *http.Request) {
+func AddCard(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	contents := r.FormValue("contents")
 	timestampStr := r.FormValue("timestamp")
