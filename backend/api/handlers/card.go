@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"CardHero/db"
 	"CardHero/models"
 	"encoding/json"
 	"fmt"
@@ -12,13 +11,13 @@ import (
 
 func GetCards(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
-	user, err := fetchUser(username)
+	user, err := models.FetchUser(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	cards, err := getCards(*user)
+	cards, err := models.GetCardsBy(*user)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -54,14 +53,14 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 
 	timestamp, _ := time.Parse(time.RFC3339, timestampStr)
 
-	user, err := fetchUser(username)
+	user, err := models.FetchUser(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	card := models.NewCard(*user, contents, timestamp)
-	saveCard(card)
+	models.SaveCard(card)
 
 	cardJson, err := json.Marshal(card)
 	if err != nil {
@@ -75,33 +74,4 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-}
-
-func fetchUser(username string) (*models.User, error) {
-	conn := db.GetConn()
-
-	var user models.User
-	err := conn.Find(&user, "username = ?", username).Error
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-}
-
-func getCards(user models.User) ([]models.Card, error) {
-	conn := db.GetConn()
-
-	var cards []models.Card
-	err := conn.Find(&cards, "owner_id = ?", user.ID).Error
-	if err != nil {
-		return nil, err
-	}
-
-	return cards, nil
-}
-
-func saveCard(card models.Card) {
-	conn := db.GetConn()
-	conn.Create(&card)
 }

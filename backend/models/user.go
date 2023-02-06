@@ -1,6 +1,7 @@
 package models
 
 import (
+	"CardHero/db"
 	uuid "github.com/satori/go.uuid"
 	"net/mail"
 )
@@ -26,4 +27,16 @@ func NewUser(username string, firstName string, lastName string, emailStr string
 		Username: username, FirstName: firstName, LastName: lastName,
 		Email: email.Address, Password: password,
 	}, nil
+}
+
+func FetchUser(username string) (*User, error) {
+	conn := db.GetConn()
+
+	var user User
+	err := conn.Find(&user, "username = ?", username).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
