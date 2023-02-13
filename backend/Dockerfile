@@ -15,4 +15,4 @@ EXPOSE 8080
 
 # Build and run the app
 RUN go build -o cardhero
-CMD ["./cardhero"]
+ENTRYPOINT ["/app/cardhero"]
