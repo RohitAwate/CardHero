@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  backend:
+    build: .
+    env_file:
+      - dev.env
+    ports:
+      - "8080:8080"
+    links:
+      - redis
+
+  redis:
+    image: redis:7.0-alpine
