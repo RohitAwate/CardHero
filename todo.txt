@@ -8,3 +8,8 @@
 - input validation
     - user
     - card
+
+
+docker build . --tag cardhero
+docker rmi $(docker images -f dangling=true -q) --force
+docker run --env-file dev.env -p 8080:8080 cardhero
