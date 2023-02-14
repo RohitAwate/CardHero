@@ -4,7 +4,6 @@ import (
 	"CardHero/db"
 	"CardHero/models"
 	"encoding/json"
-	"fmt"
 	"github.com/go-chi/chi/v5"
 	"net/http"
 	"time"
@@ -49,19 +48,16 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	contents := r.FormValue("contents")
 	timestampStr := r.FormValue("timestamp")
-
-	fmt.Println(timestampStr)
-
 	timestamp, _ := time.Parse(time.RFC3339, timestampStr)
 
 	user, err := db.GetUser(username)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
 	card := models.NewCard(*user, contents, timestamp)
-	db.SaveCard(card)
+	go db.SaveCard(card)
 
 	cardJson, err := json.Marshal(card)
 	if err != nil {
