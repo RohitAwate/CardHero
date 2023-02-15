@@ -17,6 +17,7 @@ func NewCard(owner User, contents string, timestamp time.Time) Card {
 	return Card{
 		ID:        uuid.NewV4(),
 		Timestamp: timestamp,
+		OwnerID:   owner.ID,
 		Owner:     owner,
 		Contents:  contents,
 	}

@@ -31,7 +31,7 @@ func init() {
 
 	log.Println("Connected to database")
 
-	err = database.AutoMigrate(&models.User{}, &models.Card{})
+	err = database.AutoMigrate(models.GetAll()...)
 	if err != nil {
 		panic(err)
 	}
