@@ -21,16 +21,10 @@ class Chat extends Component {
     onSubmit = async (event) => {
         event.preventDefault();
         const contents = this.inputRef.current.value();
-        console.log(contents);
         if (contents.trim() === "") return;
 
-        const payload = new URLSearchParams();
-        payload.append('contents', contents);
-        payload.append('timestamp', new Date().toISOString());
-
-        const resp = await axios.post("/api/rohit/logs", payload);
-        if (resp.status === 201) {
-            const newCard = resp.data;
+        const newCard = await this.props.onNewCard(contents);
+        if (newCard !== null) {
             const logs = this.state.logs;
             logs.push(newCard);
             this.setState({logs: logs});

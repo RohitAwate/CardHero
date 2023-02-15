@@ -4,6 +4,7 @@ class MultiLineInput extends Component {
     constructor(props) {
         super(props);
         this.inputValue = "";
+        this.inputRef = React.createRef();
     }
 
     reset = () => {
@@ -44,6 +45,10 @@ class MultiLineInput extends Component {
             onKeyDown={this.onSubmit}
             onInput={this.onInput}
         >{this.inputValue}</div>;
+    }
+
+    componentDidMount() {
+        this.inputRef.current.focus();
     }
 }
 

@@ -12,7 +12,7 @@ type Card struct {
 	Owner     User      `json:"-"`
 	Contents  string    `json:"contents,omitempty"`
 	FolderID  uuid.UUID `json:"-" gorm:"not null"`
-	Folder    Folder    `json:"folder"`
+	Folder    Folder    `json:"-"`
 }
 
 func NewCard(owner User, contents string, timestamp time.Time) Card {
