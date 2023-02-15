@@ -25,7 +25,7 @@ class LeftPane extends Component {
 
     render() {
         return <div id="left-pane">
-            <FolderTreeView folders={this.state.folders} indent={35}/>
+            <FolderTreeView folders={this.state.folders} indent={15}/>
         </div>;
     }
 }

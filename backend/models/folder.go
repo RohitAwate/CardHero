@@ -40,3 +40,13 @@ const (
 func NewRoot(owner User) Folder {
 	return NewFolder(RootFolderName, nil, owner)
 }
+
+const (
+	FolderStartCommand = "//"
+	FolderDelimiter    = "/"
+)
+
+type FolderStructure struct {
+	FolderName string            `json:"name"`
+	Children   []FolderStructure `json:"children"`
+}

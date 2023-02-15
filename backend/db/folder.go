@@ -8,11 +8,6 @@ import (
 	"strings"
 )
 
-const (
-	FolderStartCommand = "//"
-	FolderDelimiter    = "/"
-)
-
 func IngestCard(card models.Card, user models.User) {
 	BuildFoldersFromCard(&card, user)
 	SaveCard(card)
@@ -30,11 +25,11 @@ func BuildFoldersFromCard(card *models.Card, owner models.User) {
 
 	parent := root
 	for _, token := range tokens {
-		if strings.HasPrefix(token, FolderStartCommand) {
+		if strings.HasPrefix(token, models.FolderStartCommand) {
 			// Stripping away the double forward slash
 			token = token[2:]
 
-			folders := strings.Split(token, FolderDelimiter)
+			folders := strings.Split(token, models.FolderDelimiter)
 
 			for _, folderName := range folders {
 				// This could happen if there are redundant slashes
@@ -67,31 +62,90 @@ func CreateDefaultFolder(root models.Folder, ch chan models.Folder) {
 	ch <- defaultFolder
 }
 
-func GetFolder(folder models.Folder) (models.Folder, error) {
+func GetFolder(name string, parent *models.Folder, owner models.User) (models.Folder, error) {
 	conn := getConn()
 
 	condition := "owner_id = ? and name = ? and parent_id "
-	args := []interface{}{folder.OwnerID, folder.Name}
 
-	var existingFolder models.Folder
+	var folder models.Folder
 	var err error
 
-	if folder.Parent == nil {
+	if parent == nil {
 		condition += "is null"
-		err = conn.Find(&existingFolder, condition, folder.OwnerID, folder.Name).Error
+		err = conn.Find(&folder, condition, owner.ID, name).Error
 	} else {
 		condition += "= ?"
-		args = append(args, folder.ParentID)
-		err = conn.Find(&existingFolder, condition, folder.OwnerID, folder.Name, folder.ParentID).Error
+		err = conn.Find(&folder, condition, owner.ID, name, parent.ID).Error
 	}
 
-	return existingFolder, err
+	return folder, err
+}
+
+func GetFolderContents(path string, user models.User) (*models.FolderStructure, error) {
+	// Traverse to that folder first
+	folders := strings.Split(path, models.FolderDelimiter)
+	var parent *models.Folder = nil
+	for _, folderName := range folders {
+		if folderName == "" {
+			continue
+		}
+
+		folder, err := GetFolder(folderName, parent, user)
+		if err != nil {
+			return nil, err
+		}
+
+		parent = &folder
+	}
+
+	fs := models.FolderStructure{FolderName: parent.Name}
+	children, err := GetChildFolders(parent)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, child := range children {
+		childPath := path + "/" + child.Name
+		childFS, err := GetFolderContents(childPath, user)
+		if err != nil {
+			return nil, err
+		}
+
+		fs.Children = append(fs.Children, *childFS)
+	}
+
+	// If no children, don't leave the array nil
+	// Make it an empty array
+	if fs.Children == nil {
+		fs.Children = []models.FolderStructure{}
+	}
+
+	return &fs, nil
+}
+
+func GetChildFolders(parent *models.Folder) ([]models.Folder, error) {
+	conn := getConn()
+
+	condition := "owner_id = ? and parent_id "
+
+	var children []models.Folder
+	var err error
+
+	if parent == nil {
+		condition += "is null"
+		err = conn.Find(&children, condition, parent.OwnerID).Error
+	} else {
+		condition += "= ?"
+		err = conn.Find(&children, condition, parent.OwnerID, parent.ID).Error
+	}
+
+	return children, err
 }
 
 func SaveFolder(folder *models.Folder) {
 	conn := getConn()
 
-	existingFolder, err := GetFolder(*folder)
+	existingFolder, err := GetFolder(folder.Name, folder.Parent, folder.Owner)
 	if err != nil {
 		fmt.Println(err)
 		return
