@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import axios from "axios";
-import LogItem from "./LogItem";
+import ChatBubble from "./ChatBubble";
 
 import "./Chat.css";
 import MultiLineInput from "./MultiLineInput";
@@ -48,10 +48,10 @@ class Chat extends Component {
                 {
                     this.state.logs.length ?
                         this.state.logs.map(card => {
-                            return <LogItem key={card.id} card={card}/>
+                            return <ChatBubble key={card.id} card={card}/>
                         })
                         :
-                        <LogItem card={this.DEFAULT_CARD}/>
+                        <ChatBubble card={this.DEFAULT_CARD}/>
                 }
                 <div ref={this.bottomFocusRef}/>
             </div>
