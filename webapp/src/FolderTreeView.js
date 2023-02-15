@@ -8,7 +8,7 @@ class FolderTreeView extends Component {
         return <div id="folder-tree-view">
             {
                 this.props.folders.map(folder => {
-                    return <Folder offset={0} indent={this.props.indent} folder={folder}/>
+                    return <Folder key={folder.id} offset={0} indent={this.props.indent} folder={folder}/>
                 })
             }
         </div>;

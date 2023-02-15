@@ -98,7 +98,7 @@ func GetFolderContents(path string, user models.User) (*models.FolderStructure, 
 		parent = &folder
 	}
 
-	fs := models.FolderStructure{FolderName: parent.Name}
+	fs := models.FolderStructure{ID: parent.ID, FolderName: parent.Name}
 	children, err := GetChildFolders(parent)
 	if err != nil {
 		return nil, err

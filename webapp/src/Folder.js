@@ -41,7 +41,7 @@ class Folder extends Component {
             {
                 this.state.expanded ?
                     this.props.folder.children.map(
-                        child => <Folder offset={childOffset} indent={this.props.indent} folder={child}/>
+                        child => <Folder key={child.id} offset={childOffset} indent={this.props.indent} folder={child}/>
                     )
                     : ""
             }

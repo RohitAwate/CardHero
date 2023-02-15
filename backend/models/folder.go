@@ -47,6 +47,7 @@ const (
 )
 
 type FolderStructure struct {
+	ID         uuid.UUID         `json:"id"`
 	FolderName string            `json:"name"`
 	Children   []FolderStructure `json:"children"`
 }
