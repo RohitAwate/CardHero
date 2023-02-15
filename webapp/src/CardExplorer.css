@@ -1,0 +1,9 @@
+#card-explorer {
+    display: flex;
+    flex-direction: column;
+}
+
+#card-explorer-main {
+    display: flex;
+    height: 100%;
+}
