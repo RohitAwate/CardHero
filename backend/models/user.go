@@ -9,10 +9,10 @@ type User struct {
 	ID uuid.UUID `gorm:"type:uuid;primary_key"`
 
 	Username  string `gorm:"index:username_idx,unique"`
-	FirstName string
-	LastName  string
+	FirstName string `gorm:"not null"`
+	LastName  string `gorm:"not null"`
 	Email     string `gorm:"index:username_idx,unique"`
-	Password  string
+	Password  string `gorm:"not null"`
 }
 
 func NewUser(username string, firstName string, lastName string, emailStr string, password string) (*User, error) {

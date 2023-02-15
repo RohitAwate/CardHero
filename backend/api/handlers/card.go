@@ -57,11 +57,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	card := models.NewCard(*user, contents, timestamp)
-
-	// TODO: Wrap all these into one IngestCard() call and enqueue it
-	// There's gonna be more stuff here (search index updates, ML stuff)
-	go db.SaveCard(card)
-	go db.BuildFoldersFromCard(card, *user)
+	go db.IngestCard(card, *user)
 
 	cardJson, err := json.Marshal(card)
 	if err != nil {

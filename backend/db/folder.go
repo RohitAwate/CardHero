@@ -13,26 +13,58 @@ const (
 	FolderDelimiter    = "/"
 )
 
-func BuildFoldersFromCard(card models.Card, owner models.User) {
+func IngestCard(card models.Card, user models.User) {
+	BuildFoldersFromCard(&card, user)
+	SaveCard(card)
+}
+
+func BuildFoldersFromCard(card *models.Card, owner models.User) {
 	whitespaceRegex := regexp.MustCompile("\\s+")
 	tokens := whitespaceRegex.Split(card.Contents, -1)
 
-	parent := models.NewRoot(owner)
-	SaveFolder(&parent)
+	root := models.NewRoot(owner)
+	SaveFolder(&root)
 
+	ch := make(chan models.Folder)
+	go CreateDefaultFolder(root, ch)
+
+	parent := root
 	for _, token := range tokens {
 		if strings.HasPrefix(token, FolderStartCommand) {
+			// Stripping away the double forward slash
+			token = token[2:]
+
 			folders := strings.Split(token, FolderDelimiter)
 
-			for _, folder := range folders[2:] {
-				// Skipping first 2 since they would be empty because of the "//"
-				newFolder := models.NewFolder(folder, &parent, owner)
+			for _, folderName := range folders {
+				// This could happen if there are redundant slashes
+				//like so
+				// - //dev/jetbrains/goland/ -- the trailing slash here
+				// - ///recipes/pasta -- the 3 slashes at the start
+				if folderName == "" {
+					continue
+				}
+
+				newFolder := models.NewFolder(folderName, &parent, owner)
 				SaveFolder(&newFolder)
 
 				parent = newFolder
 			}
 		}
 	}
+
+	if parent != root {
+		card.AssignFolder(parent)
+	} else {
+		defaultFolder := <-ch
+		card.AssignFolder(defaultFolder)
+	}
+}
+
+func CreateDefaultFolder(root models.Folder, ch chan models.Folder) {
+	defaultFolder := models.NewFolder("Default", &root, root.Owner)
+	SaveFolder(&defaultFolder)
+	ch <- defaultFolder
 }
 
 func GetFolder(folder models.Folder) (models.Folder, error) {
@@ -68,7 +100,6 @@ func SaveFolder(folder *models.Folder) {
 	if existingFolder.ID == uuid.Nil {
 		conn.Create(folder)
 	} else {
-		fmt.Println("Found existing: ", existingFolder.Name)
 		*folder = existingFolder
 	}
 }
