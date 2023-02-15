@@ -30,8 +30,8 @@ class Folder extends Component {
             {
                 hasChildren ?
                     <span className="folder-name" onClick={this.toggleChildren}>
-                        <img className="folder-chevron" alt="chevron" src={icon}/>
                         <p>{this.props.folder.name}</p>
+                        <img className="folder-chevron" alt="chevron" src={icon}/>
                     </span>
                     :
                     <span className="folder-name" onClick={this.toggleChildren}>
