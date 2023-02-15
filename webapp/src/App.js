@@ -1,11 +1,11 @@
 import {Component} from "react";
-import Log from "./Log";
+import Chat from "./Chat";
 
 import "./App.css";
 
 class App extends Component {
     render() {
-        return <Log/>;
+        return <Chat/>;
     }
 }
 

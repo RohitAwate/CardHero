@@ -1,4 +1,4 @@
-#log-container {
+#chat-container {
     max-width: 30%;
     height: 90vh;
     background-color: #EFEAE2;
@@ -10,7 +10,7 @@
     justify-content: flex-end;
 }
 
-#log-pane {
+#chat-pane {
     padding: 10px 20px;
 
     align-self: flex-end;
@@ -21,17 +21,17 @@
     overflow-y: auto;
 }
 
-#log-input-container {
+#chat-input-container {
     background-color: #eaeef6;
     padding: 10px;
 }
 
-#log-input-form {
+#chat-input-form {
     display: flex;
     vertical-align: center;
 }
 
-#log-input-text {
+#chat-input-text {
     border: none;
     border-radius: 10px;
     width: 90%;
@@ -43,23 +43,23 @@
     word-break: break-word;
 }
 
-#log-input-text:empty:before {
+#chat-input-text:empty:before {
     content: attr(placeholder);
     color: grey;
     pointer-events: none;
     display: block; /*  For Firefox  */
 }
 
-#log-input-text:focus {
+#chat-input-text:focus {
     outline: none;
 }
 
-#log-send-btn {
+#chat-send-btn {
     border: none;
     background-color: transparent;
 }
 
-#log-send-btn > img {
+#chat-send-btn > img {
     opacity: 0.4;
     width: 30px;
 }

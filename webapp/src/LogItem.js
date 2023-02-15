@@ -7,9 +7,9 @@ class LogItem extends Component {
         const card = this.props.card;
         const formattedTime = LogItem.renderTimestamp(card.timestamp);
 
-        return <div key={card.id} className="log-item">
-            <p className="log-item-contents">{card.contents}</p>
-            <div className="log-item-timestamp">{formattedTime}</div>
+        return <div key={card.id} className="chat-item">
+            <p className="chat-item-contents">{card.contents}</p>
+            <div className="chat-item-timestamp">{formattedTime}</div>
         </div>;
     }
 

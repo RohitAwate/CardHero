@@ -1,4 +1,4 @@
-.log-item {
+.chat-item {
     min-width: 300px;
     max-width: 70%;
     border-radius: 10px;
@@ -13,13 +13,13 @@
     box-shadow: 1px 1px 3px #81987f;
 }
 
-.log-item-contents {
+.chat-item-contents {
     padding: 0 5px;
     white-space: pre-line;
     word-break: break-word;
 }
 
-.log-item-timestamp {
+.chat-item-timestamp {
     color: #858585;
     text-align: right;
     padding: 0 5px 5px 0;

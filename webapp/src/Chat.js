@@ -2,10 +2,10 @@ import React, {Component} from "react";
 import axios from "axios";
 import LogItem from "./LogItem";
 
-import "./Log.css";
+import "./Chat.css";
 import MultiLineInput from "./MultiLineInput";
 
-class Log extends Component {
+class Chat extends Component {
     DEFAULT_CARD = {
         contents: "Add something to the log!",
         timestamp: new Date().toISOString()
@@ -43,8 +43,8 @@ class Log extends Component {
     }
 
     render() {
-        return <div id="log-container">
-            <div id="log-pane">
+        return <div id="chat-container">
+            <div id="chat-pane">
                 {
                     this.state.logs.length ?
                         this.state.logs.map(card => {
@@ -55,15 +55,15 @@ class Log extends Component {
                 }
                 <div ref={this.bottomFocusRef}/>
             </div>
-            <div id="log-input-container">
-                <form id="log-input-form" onSubmit={this.onSubmit}>
+            <div id="chat-input-container">
+                <form id="chat-input-form" onSubmit={this.onSubmit}>
                     <MultiLineInput
-                        id="log-input-text"
+                        id="chat-input-text"
                         ref={this.inputRef}
                         placeholder="Type a message"
                         onSubmit={this.onSubmit}
                     />
-                    <button id="log-send-btn"><img src="/icons/send-plane-48.png" alt="send-icon"/></button>
+                    <button id="chat-send-btn"><img src="/icons/send-plane-48.png" alt="send-icon"/></button>
                 </form>
             </div>
         </div>;
@@ -83,4 +83,4 @@ class Log extends Component {
     }
 }
 
-export default Log;
+export default Chat;
