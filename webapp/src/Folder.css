@@ -1,0 +1,18 @@
+.folder-name {
+    width: 100%;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.folder-name > * {
+    padding: 0 3px;
+}
+
+.folder-chevron {
+    width: 1.5em;
+    height: 1.5em;
+}
