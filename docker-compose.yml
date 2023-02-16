@@ -13,7 +13,9 @@ services:
   webapp:
     build: webapp
     ports:
-      - "8080:80"
+      - "443:443"
+      - "80:80"
+
   pg:
     image: postgres:15.2-alpine
     env_file:
