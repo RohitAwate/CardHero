@@ -1,32 +1,64 @@
-version: '2'
+version: '3'
 
 services:
   backend:
     build: backend
     env_file:
       - backend/docker.env
-    links:
+    depends_on:
       - redis
       - pg
-      - webapp
+    networks:
+      - cardhero-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://backend:8080"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
 
   webapp:
     build: webapp
     ports:
       - "443:443"
       - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - cardhero-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://webapp"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
 
   pg:
     image: postgres:15.2-alpine
     env_file:
       - backend/docker.env
     ports:
-      - "5432:5432"
+      - "5588:5432"
     volumes:
       - pg_db:/var/lib/postgresql/data
+    networks:
+      - cardhero-net
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "pg"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
 
   redis:
     image: redis:7.0-alpine
+    networks:
+      - cardhero-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+networks:
+  cardhero-net:
 
 volumes:
   pg_db:
