@@ -81,7 +81,7 @@ func GetFolder(name string, parent *models.Folder, owner models.User) (models.Fo
 	return folder, err
 }
 
-func GetFolderContents(path string, user models.User) (*models.FolderStructure, error) {
+func GetFolderStructure(path string, user models.User) (*models.FolderStructure, error) {
 	// Traverse to that folder first
 	folders := strings.Split(path, models.FolderDelimiter)
 	var parent *models.Folder = nil
@@ -106,7 +106,7 @@ func GetFolderContents(path string, user models.User) (*models.FolderStructure, 
 
 	for _, child := range children {
 		childPath := path + "/" + child.Name
-		childFS, err := GetFolderContents(childPath, user)
+		childFS, err := GetFolderStructure(childPath, user)
 		if err != nil {
 			return nil, err
 		}
@@ -140,6 +140,21 @@ func GetChildFolders(parent *models.Folder) ([]models.Folder, error) {
 	}
 
 	return children, err
+}
+
+func GetCardsInFolder(folderID uuid.UUID, owner models.User) ([]models.Card, error) {
+	var cards []models.Card
+
+	fmt.Println(folderID, owner.ID)
+
+	conn := getConn()
+
+	err := conn.Find(&cards, "folder_id = ? and owner_id = ?", folderID, owner.ID).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return cards, nil
 }
 
 func SaveFolder(folder *models.Folder) {

@@ -25,6 +25,8 @@ func NewServer(port uint) Server {
 			router.Route("/folders", func(router chi.Router) {
 				router.Get("/*", handlers.GetFolders)
 			})
+
+			router.Get("/folder/{folderID}", handlers.GetCardsFromFolder)
 		})
 	})
 
