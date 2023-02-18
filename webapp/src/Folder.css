@@ -24,8 +24,8 @@
     padding-left: 10px;
 }
 
-.folder-name:hover {
-    background-color: #e0e0e0;
+.folder-name:hover, .folder-selected {
+    background-color: #e5e5e5;
     border-radius: 5px;
 
 }

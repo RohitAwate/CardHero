@@ -24,7 +24,6 @@ class App extends Component {
         const resp = await axios.get("/api/rohit/folders/");
         if (resp.status === 200) {
             this.setState({folders: resp.data.children});
-            console.log(this.state.folders);
         }
     }
 

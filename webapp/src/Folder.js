@@ -7,8 +7,10 @@ class Folder extends Component {
         expanded: true
     }
 
-    toggleChildren = (e) => {
+    onFolderClick = (e) => {
         this.setState({expanded: !this.state.expanded});
+        e.folderID = this.props.folder.id;
+        this.props.onFolderSelect(e);
     }
 
     render() {
@@ -26,22 +28,27 @@ class Folder extends Component {
             icon = "/icons/chevron-right-48.png";
         }
 
+        const folderSelectedClass = this.props.folder.id === this.props.selectedFolder ? " folder-selected" : "";
+
         return <div id="folder-container" style={style}>
             {
                 hasChildren ?
-                    <span className="folder-name" onClick={this.toggleChildren}>
+                    <span className={"folder-name" + folderSelectedClass} onClick={this.onFolderClick}>
                         <p>{this.props.folder.name}</p>
                         <img className="folder-chevron" alt="chevron" src={icon}/>
                     </span>
                     :
-                    <span className="folder-name" onClick={this.toggleChildren}>
+                    <span className={"folder-name" + folderSelectedClass} onClick={this.onFolderClick}>
                         <p>{this.props.folder.name}</p>
                     </span>
             }
             {
                 this.state.expanded ?
                     this.props.folder.children.map(
-                        child => <Folder key={child.id} offset={childOffset} indent={this.props.indent} folder={child}/>
+                        child => <Folder selected={child.id === this.props.selectedFolder}
+                                         selectedFolder={this.props.selectedFolder}
+                                         key={child.id} onFolderSelect={this.props.onFolderSelect}
+                                         offset={childOffset} indent={this.props.indent} folder={child}/>
                     )
                     : ""
             }
