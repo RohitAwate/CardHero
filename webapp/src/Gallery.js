@@ -2,6 +2,7 @@ import {Component} from "react";
 
 import "./Gallery.css";
 import Card from "./Card";
+import Loader from "./Loader";
 
 class Gallery extends Component {
     render() {
@@ -9,12 +10,7 @@ class Gallery extends Component {
             {
                 this.props.cards.length > 0 ?
                     this.props.cards.map(card => <Card key={card.id} card={card}/>)
-                    : <img
-                        className="loader"
-                        src="/loaders/ellipsis-green.svg"
-                        alt="Loading..."
-                        style={{alignSelf: "center"}}
-                    />
+                    : <Loader/>
             }
         </div>;
     }
