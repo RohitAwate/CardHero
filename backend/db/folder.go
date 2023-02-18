@@ -146,11 +146,9 @@ func GetChildFolders(parent *models.Folder) ([]models.Folder, error) {
 func GetCardsInFolder(folderID uuid.UUID, owner models.User) ([]models.Card, error) {
 	var cards []models.Card
 
-	fmt.Println(folderID, owner.ID)
-
 	conn := getConn()
 
-	err := conn.Find(&cards, "folder_id = ? and owner_id = ?", folderID, owner.ID).Error
+	err := conn.Order("timestamp desc").Find(&cards, "folder_id = ? and owner_id = ?", folderID, owner.ID).Error
 	if err != nil {
 		return nil, err
 	}
