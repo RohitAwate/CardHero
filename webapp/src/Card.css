@@ -1,6 +1,6 @@
 .card {
     display: flex;
-    background-color: #ebffcb;
+    background-color: #fafafa;
 
     min-width: 10vw;
     max-width: 30vw;
@@ -14,5 +14,11 @@
     padding: 5px 25px;
     border-radius: 10px;
 
-    box-shadow: 1px 1px 3px #bec4bd;
+    box-shadow: 0 0 3px #bec4bd;
+
+    cursor: pointer;
+}
+
+.card:hover {
+    box-shadow: 0 0 5px #686c68;
 }
