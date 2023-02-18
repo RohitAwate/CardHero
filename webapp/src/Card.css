@@ -1,0 +1,18 @@
+.card {
+    display: flex;
+    background-color: #ebffcb;
+
+    min-width: 10vw;
+    max-width: 30vw;
+    height: 20vh;
+
+    font-size: 1.1em;
+    white-space: pre-wrap;
+    word-wrap: anywhere;
+
+    margin: 10px;
+    padding: 5px 25px;
+    border-radius: 10px;
+
+    box-shadow: 1px 1px 3px #bec4bd;
+}

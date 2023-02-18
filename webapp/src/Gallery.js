@@ -1,13 +1,12 @@
 import {Component} from "react";
 
-import "./CardGallery.css";
+import "./Gallery.css";
+import Card from "./Card";
 
 class Gallery extends Component {
     render() {
-        return <div id="card-gallery">
-            {
-                this.props.cards.map(card => <div>{card.contents}</div>)
-            }
+        return <div id="gallery">
+            {this.props.cards.map(card => <Card card={card}/>)}
         </div>;
     }
 }

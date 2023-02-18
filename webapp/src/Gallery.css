@@ -1,0 +1,16 @@
+#gallery {
+    width: 60vw;
+
+    /* Subtract the height of the top bar and the padding applied to this element */
+    height: calc(100vh - 50px - 40px);
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    flex: 1;
+
+    padding: 20px;
+
+    overflow-y: auto;
+}
