@@ -6,7 +6,7 @@ import "./TopBar.css";
 class TopBar extends Component {
     render() {
         return <div id="top-bar">
-            <h2>CardHero</h2>
+            <p style={{fontSize: 20}}>C A R D H E R O</p>
         </div>;
     }
 }
