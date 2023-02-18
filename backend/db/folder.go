@@ -4,6 +4,7 @@ import (
 	"CardHero/models"
 	"fmt"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm/clause"
 	"regexp"
 	"strings"
 )
@@ -72,10 +73,10 @@ func GetFolder(name string, parent *models.Folder, owner models.User) (models.Fo
 
 	if parent == nil {
 		condition += "is null"
-		err = conn.Find(&folder, condition, owner.ID, name).Error
+		err = conn.Preload(clause.Associations).Find(&folder, condition, owner.ID, name).Error
 	} else {
 		condition += "= ?"
-		err = conn.Find(&folder, condition, owner.ID, name, parent.ID).Error
+		err = conn.Preload(clause.Associations).Find(&folder, condition, owner.ID, name, parent.ID).Error
 	}
 
 	return folder, err
