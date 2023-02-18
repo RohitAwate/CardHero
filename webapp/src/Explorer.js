@@ -30,7 +30,7 @@ class Explorer extends Component {
     onFolderSelect = async (e) => {
         this.setState({selectedFolderID: e.folderID, cards: []});
 
-        const resp = await axios.get(`/api/rohit/folder/${this.state.selectedFolderID}`);
+        const resp = await axios.get(`/api/rohit/folder/${e.folderID}`);
         if (resp.status === 200) {
             this.setState({selectedFolderID: e.folderID, cards: resp.data});
         }
