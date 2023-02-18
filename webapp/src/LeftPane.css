@@ -3,3 +3,10 @@
     background-color: #fafafa;
     display: flex;
 }
+
+#left-pane-section-label {
+    font-size: 0.9em;
+    margin-left: 5px;
+    color: #858585;
+    user-select: none;
+}

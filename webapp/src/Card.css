@@ -1,5 +1,7 @@
 .card {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: #fafafa;
 
     min-width: 10vw;
@@ -11,7 +13,6 @@
     word-wrap: anywhere;
 
     margin: 10px;
-    padding: 5px 25px;
     border-radius: 10px;
 
     box-shadow: 0 0 3px #bec4bd;
@@ -21,4 +22,13 @@
 
 .card:hover {
     box-shadow: 0 0 5px #686c68;
+}
+
+.card-content {
+    padding: 5px 25px;
+}
+
+.card > .timestamp {
+    align-content: flex-end;
+    padding: 10px 15px;
 }

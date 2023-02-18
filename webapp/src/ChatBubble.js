@@ -1,6 +1,7 @@
 import {Component} from "react";
 
 import "./ChatBubble.css";
+import "./Common.css";
 
 class ChatBubble extends Component {
     render() {
@@ -9,7 +10,7 @@ class ChatBubble extends Component {
 
         return <div key={card.id} className="chat-bubble">
             <p className="chat-bubble-contents">{card.contents}</p>
-            <div className="chat-bubble-timestamp">{formattedTime}</div>
+            <div className="timestamp">{formattedTime}</div>
         </div>;
     }
 

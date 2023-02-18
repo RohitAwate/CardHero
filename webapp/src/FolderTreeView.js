@@ -6,6 +6,7 @@ import Folder from "./Folder";
 class FolderTreeView extends Component {
     render() {
         return <div id="folder-tree-view">
+            <p id="left-pane-section-label">F O L D E R S</p>
             {
                 this.props.folders.map(folder => {
                     return <Folder

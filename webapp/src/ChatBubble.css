@@ -18,10 +18,3 @@
     white-space: pre-line;
     word-break: break-word;
 }
-
-.chat-bubble-timestamp {
-    color: #858585;
-    text-align: right;
-    padding: 0 5px 5px 0;
-    font-size: 0.85em;
-}
