@@ -52,13 +52,3 @@
 #chat-input-text:focus {
     outline: none;
 }
-
-#chat-send-btn {
-    border: none;
-    background-color: transparent;
-}
-
-#chat-send-btn > img {
-    opacity: 0.4;
-    width: 30px;
-}

@@ -1,0 +1,41 @@
+.card-modal-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: #85858550;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.card-modal {
+    background-color: white;
+
+    max-width: 50vw;
+    max-height: 80vh;
+
+    min-width: 30vw;
+    min-height: 50vh;
+
+    padding: 15px 30px;
+    border-radius: 10px;
+
+    overflow-y: auto;
+}
+
+.card-modal-nav-bar {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-modal-body {
+    white-space: pre-wrap;
+    word-break: break-word;
+}

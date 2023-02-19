@@ -3,6 +3,7 @@ import axios from "axios";
 import ChatBubble from "./ChatBubble";
 
 import "./Chat.css";
+import "./Common.css";
 import MultiLineInput from "./MultiLineInput";
 
 class Chat extends Component {
@@ -57,7 +58,8 @@ class Chat extends Component {
                         placeholder="Type a message"
                         onSubmit={this.onSubmit}
                     />
-                    <button id="chat-send-btn"><img src="/icons/send-plane-48.png" alt="send-icon"/></button>
+                    <button className="transparent-btn"><img src="/icons/send-plane-48.png" alt="send-icon"/>
+                    </button>
                 </form>
             </div>
         </div>;

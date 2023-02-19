@@ -1,15 +1,29 @@
 import {Component} from "react";
 
 import "./Gallery.css";
-import Card from "./Card";
+import CardModal from "./CardModal";
 import Loader from "./Loader";
+import Card from "./Card";
 
 class Gallery extends Component {
+    state = {cardModal: null};
+
+    onCardClick = (card) => {
+        this.setState({cardModal: card})
+    }
+
+    onModalExit = () => {
+        this.setState({cardModal: null})
+    }
+
     render() {
         return <div id="gallery">
             {
+                this.state.cardModal ? <CardModal card={this.state.cardModal} onExit={this.onModalExit} /> : ""
+            }
+            {
                 this.props.cards.length > 0 ?
-                    this.props.cards.map(card => <Card key={card.id} card={card}/>)
+                    this.props.cards.map(card => <Card onCardClick={this.onCardClick} key={card.id} card={card}/>)
                     : <Loader/>
             }
         </div>;

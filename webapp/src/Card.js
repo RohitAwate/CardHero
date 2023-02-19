@@ -4,16 +4,6 @@ import "./Card.css";
 import "./Common.css";
 
 class Card extends Component {
-    render() {
-        const card = this.props.card;
-        const formattedTime = Card.renderTimestamp(card.timestamp);
-
-        return <div className="card">
-            <p className="card-content">{card.contents}</p>
-            <div className="timestamp">{formattedTime}</div>
-        </div>;
-    }
-
     static renderTimestamp(timestamp) {
         const ts = new Date(timestamp);
         const now = new Date();
@@ -38,6 +28,16 @@ class Card extends Component {
         }
 
         return tsString;
+    }
+
+    render() {
+        const card = this.props.card;
+        const formattedTime = Card.renderTimestamp(card.timestamp);
+
+        return <div className="card" onClick={_ => this.props.onCardClick(card)}>
+            <p className="card-content">{card.contents}</p>
+            <div className="timestamp">{formattedTime}</div>
+        </div>;
     }
 }
 
