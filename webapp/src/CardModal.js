@@ -9,15 +9,28 @@ class CardModal extends Component {
     }
 
     onMouseMovement = (inside) => {
-        console.log("inside:", inside)
         this.setState({mouseInside: inside});
+    }
+
+    onKeyDown = (e) => {
+        if (e.key === "Escape") {
+            this.props.onExit();
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", this.onKeyDown, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.onKeyDown, false);
     }
 
     render() {
         const card = this.props.card;
         const folders = ["Folder", "Sub-folder", "Another sub-folder"];
 
-        return <div className="card-modal-container" onClick={this.props.onExit}>
+        return <div className="card-modal-container" onClick={this.props.onExit} onKeyDown={this.onKeyDown}>
             <div
                 className="card-modal"
                 onClick={event => event.stopPropagation()}
@@ -39,13 +52,12 @@ class CardModal extends Component {
                     <div className="card-modal-nav-bar-folders-container">
                         {
                             folders.map((folder, i, row) => {
-                                const link = <a className="folder-link" href="#">{folder}</a>;
+                                const link = <a key={i} className="folder-link" href="#">{folder}</a>;
                                 if (i + 1 === row.length) {
-                                    // Last one.
                                     return link;
                                 } else {
-                                    // Not last one.
-                                    return [link, <p className="folder-link-spacer">⟩</p>];
+                                    const spacerKey = `${folder}-${i}-spacer`;
+                                    return [link, <p key={spacerKey} className="folder-link-spacer">⟩</p>];
                                 }
                             })
                         }
