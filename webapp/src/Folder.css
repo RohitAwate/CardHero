@@ -4,7 +4,7 @@
 
 .folder-name {
     width: 100%;
-    height: 35px;
+    height: 30px;
 
     display: flex;
     align-items: center;
@@ -12,8 +12,8 @@
     cursor: pointer;
     user-select: none;
 
-    color: #202020;
-    font-size: 1em;
+    color: #303030;
+    font-size: 0.95em;
 }
 
 .folder-name > * {
