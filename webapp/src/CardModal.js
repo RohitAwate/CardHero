@@ -45,7 +45,7 @@ class CardModal extends Component {
                                     return link;
                                 } else {
                                     // Not last one.
-                                    return [link, "  >  "];
+                                    return [link, <p className="folder-link-spacer">⟩</p>];
                                 }
                             })
                         }
