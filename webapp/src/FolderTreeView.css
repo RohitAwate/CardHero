@@ -6,6 +6,6 @@
     width: 100%;
 
     /* Subtract the height of the top bar and the padding applied to this element */
-    max-height: calc(100vh - 50px);
+    max-height: calc(100vh - 50px - 20px);
     overflow-y: auto;
 }
