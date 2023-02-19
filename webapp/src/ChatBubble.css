@@ -1,5 +1,5 @@
 .chat-bubble {
-    /*min-width: 300px;*/
+    min-width: 10vh;
     max-width: 85%;
     border-radius: 10px;
 
