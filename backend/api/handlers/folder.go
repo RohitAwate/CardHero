@@ -74,8 +74,6 @@ func GetCardsFromFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(cards)
-
 	cardsJSON, err := json.Marshal(cards)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
