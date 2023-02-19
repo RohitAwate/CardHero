@@ -9,7 +9,6 @@
     min-height: 10vh;
     max-height: 30vh;
 
-    font-size: 1.1em;
     white-space: pre-wrap;
     word-wrap: anywhere;
 
@@ -28,6 +27,8 @@
 }
 
 .card-content {
+    color: #202020;
+
     padding: 5px 25px;
     text-overflow: ellipsis;
     overflow: clip;

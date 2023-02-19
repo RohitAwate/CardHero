@@ -31,6 +31,10 @@
     vertical-align: center;
 }
 
+#chat-input-form > .transparent-btn {
+    opacity: 0.4;
+}
+
 #chat-input-text {
     border: none;
     border-radius: 10px;

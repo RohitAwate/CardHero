@@ -11,8 +11,12 @@
     cursor: pointer;
 }
 
+.transparent-btn:hover {
+    background-color: #85858520;
+    border-radius: 5px;
+}
+
 .transparent-btn > img {
-    opacity: 0.4;
     width: 30px;
 }
 

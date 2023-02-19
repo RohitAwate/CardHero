@@ -25,25 +25,56 @@
     border-radius: 10px;
 
     overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .card-modal-nav-bar {
-    padding: 5px 20px;
-    background-color: #eee;
+    position: relative;
+}
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.card-modal-nav-bar > .transparent-btn {
+    position: absolute;
+    right: 0;
+    margin: 10px 10px 0 0;
+    padding: 0 0 10px 10px;
+    border-radius: 0 0 0 50px;
+    background-color: #fff;
+    box-shadow: -15px 15px 15px white;
+}
+
+.card-modal-nav-bar > .transparent-btn > img {
+    opacity: 0.5;
+}
+
+.card-modal-nav-bar > .transparent-btn > img:hover {
+    opacity: 0.65;
+}
+
+.card-modal-nav-bar-folders-container {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: clip;
 }
 
 .folder-link {
     font-weight: bold;
-    color: #282828;
+    color: #444;
+    margin: 0 3px;
 }
 
 .card-modal-body {
-    padding: 15px 30px;
+    color: #202020;
+
+    height: 100%;
+    padding: 0 20px;
 
     white-space: pre-wrap;
     word-break: break-word;
+}
+
+.card-modal-bottom-bar {
+    padding: 0 15px;
 }
