@@ -5,7 +5,7 @@
     right: 0;
     bottom: 0;
 
-    background-color: #85858550;
+    background-color: #00000070;
 
     display: flex;
     justify-content: center;
@@ -22,20 +22,28 @@
     min-width: 30vw;
     min-height: 50vh;
 
-    padding: 15px 30px;
     border-radius: 10px;
 
     overflow-y: auto;
 }
 
 .card-modal-nav-bar {
-    width: 100%;
+    padding: 5px 20px;
+    background-color: #eee;
 
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.folder-link {
+    font-weight: bold;
+    color: #282828;
 }
 
 .card-modal-body {
+    padding: 15px 30px;
+
     white-space: pre-wrap;
     word-break: break-word;
 }
