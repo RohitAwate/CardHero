@@ -4,4 +4,8 @@
     flex-direction: column;
 
     width: 100%;
+
+    /* Subtract the height of the top bar and the padding applied to this element */
+    max-height: calc(100vh - 50px);
+    overflow-y: auto;
 }
