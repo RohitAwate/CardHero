@@ -29,19 +29,24 @@ func GetFolders(w http.ResponseWriter, r *http.Request) {
 		path = fmt.Sprintf("%s/%s", models.RootFolderName, path)
 	}
 
-	fs, err := db.GetFolderStructure(path, *user)
+	pathRoot, err := db.ResolveFolder(path, *user)
 	if err != nil {
 		// TODO
 	}
 
-	fsJSON, err := json.Marshal(fs)
+	fh, err := db.GetFolderHierarchy(*pathRoot)
+	if err != nil {
+		// TODO
+	}
+
+	fhJSON, err := json.Marshal(fh)
 	if err != nil {
 		// TODO
 	}
 
 	w.Header().Add("content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_, err = w.Write(fsJSON)
+	_, err = w.Write(fhJSON)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}

@@ -46,8 +46,23 @@ const (
 	FolderDelimiter    = "/"
 )
 
-type FolderStructure struct {
+type FolderHierarchy struct {
 	ID         uuid.UUID         `json:"id"`
 	FolderName string            `json:"name"`
-	Children   []FolderStructure `json:"children"`
+	Children   []FolderHierarchy `json:"children"`
+}
+
+func BuildHierarchy(parent Folder, folders []Folder) FolderHierarchy {
+	fh := FolderHierarchy{
+		ID: parent.ID, FolderName: parent.Name, Children: []FolderHierarchy{},
+	}
+
+	for _, folder := range folders {
+		if folder.ID != parent.ID && *folder.ParentID == parent.ID {
+			childFH := BuildHierarchy(folder, folders)
+			fh.Children = append(fh.Children, childFH)
+		}
+	}
+
+	return fh
 }

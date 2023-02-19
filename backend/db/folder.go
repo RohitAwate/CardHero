@@ -82,7 +82,7 @@ func GetFolder(name string, parent *models.Folder, owner models.User) (models.Fo
 	return folder, err
 }
 
-func GetFolderStructure(path string, user models.User) (*models.FolderStructure, error) {
+func ResolveFolder(path string, user models.User) (*models.Folder, error) {
 	// Traverse to that folder first
 	folders := strings.Split(path, models.FolderDelimiter)
 	var parent *models.Folder = nil
@@ -99,48 +99,39 @@ func GetFolderStructure(path string, user models.User) (*models.FolderStructure,
 		parent = &folder
 	}
 
-	fs := models.FolderStructure{ID: parent.ID, FolderName: parent.Name}
-	children, err := GetChildFolders(parent)
+	return parent, nil
+}
+
+const (
+	GetFolderHierarchyCTE = `
+		with recursive folder_cte as (
+			select f.id, f.name, f.parent_id, f.owner_id 
+			from folders f 
+			where parent_id = ?
+			and owner_id = ?
+			
+			union all 	
+			
+			select f.id, f.name, f.parent_id, f.owner_id 
+			from folders f
+			inner join folder_cte fcte on f.parent_id = fcte.id
+		)
+		select *
+		from folder_cte;
+	`
+)
+
+func GetFolderHierarchy(parent models.Folder) (*models.FolderHierarchy, error) {
+	conn := getConn()
+
+	var folders []models.Folder
+	err := conn.Raw(GetFolderHierarchyCTE, parent.ID, parent.OwnerID).Scan(&folders).Error
 	if err != nil {
 		return nil, err
 	}
 
-	for _, child := range children {
-		childPath := path + "/" + child.Name
-		childFS, err := GetFolderStructure(childPath, user)
-		if err != nil {
-			return nil, err
-		}
-
-		fs.Children = append(fs.Children, *childFS)
-	}
-
-	// If no children, don't leave the array nil
-	// Make it an empty array
-	if fs.Children == nil {
-		fs.Children = []models.FolderStructure{}
-	}
-
-	return &fs, nil
-}
-
-func GetChildFolders(parent *models.Folder) ([]models.Folder, error) {
-	conn := getConn()
-
-	condition := "owner_id = ? and parent_id "
-
-	var children []models.Folder
-	var err error
-
-	if parent == nil {
-		condition += "is null"
-		err = conn.Find(&children, condition, parent.OwnerID).Error
-	} else {
-		condition += "= ?"
-		err = conn.Find(&children, condition, parent.OwnerID, parent.ID).Error
-	}
-
-	return children, err
+	fh := models.BuildHierarchy(parent, folders)
+	return &fh, nil
 }
 
 func GetCardsInFolder(folderID uuid.UUID, owner models.User) ([]models.Card, error) {
