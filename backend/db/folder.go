@@ -82,28 +82,46 @@ func GetFolder(name string, parent *models.Folder, owner models.User) (models.Fo
 	return folder, err
 }
 
+const (
+	resolveFolderCTE = `
+		with recursive folders_with_depth as (
+			SELECT unnest(parts) AS folder_name, generate_series(1, array_length(parts, 1)) AS depth
+			FROM (SELECT string_to_array(?, ?) AS parts) AS subquery
+		), folders_cte as (
+			select id, name, parent_id, owner_id, 1 as level
+			from folders f
+			where parent_id is null
+			and owner_id = ?
+		
+			union all
+		
+			select f.id, f.name, f.parent_id, f.owner_id, level + 1
+			from folders f
+			join folders_cte fcte on f.parent_id = fcte.id
+			join folders_with_depth fwd on f.name = fwd.folder_name and fwd.depth = fcte.level + 1
+		)
+		select id, name, parent_id, owner_id
+		from folders_cte where level = (
+			select depth from folders_with_depth
+			order by depth desc limit 1
+		);
+	`
+)
+
 func ResolveFolder(path string, user models.User) (*models.Folder, error) {
-	// Traverse to that folder first
-	folders := strings.Split(path, models.FolderDelimiter)
-	var parent *models.Folder = nil
-	for _, folderName := range folders {
-		if folderName == "" {
-			continue
-		}
+	conn := getConn()
 
-		folder, err := GetFolder(folderName, parent, user)
-		if err != nil {
-			return nil, err
-		}
-
-		parent = &folder
+	folder := models.Folder{}
+	err := conn.Raw(resolveFolderCTE, path, models.FolderDelimiter, user.ID).Scan(&folder).Error
+	if err != nil {
+		return nil, err
 	}
 
-	return parent, nil
+	return &folder, nil
 }
 
 const (
-	GetFolderHierarchyCTE = `
+	getFolderHierarchyCTE = `
 		with recursive folder_cte as (
 			select f.id, f.name, f.parent_id, f.owner_id 
 			from folders f 
@@ -125,7 +143,7 @@ func GetFolderHierarchy(parent models.Folder) (*models.FolderHierarchy, error) {
 	conn := getConn()
 
 	var folders []models.Folder
-	err := conn.Raw(GetFolderHierarchyCTE, parent.ID, parent.OwnerID).Scan(&folders).Error
+	err := conn.Raw(getFolderHierarchyCTE, parent.ID, parent.OwnerID).Scan(&folders).Error
 	if err != nil {
 		return nil, err
 	}
