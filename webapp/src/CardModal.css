@@ -46,7 +46,8 @@
 }
 
 .card-modal-nav-bar > .transparent-btn > img {
-    opacity: 0.5;
+    width: 2.1em;
+    opacity: 0.45;
 }
 
 .card-modal-nav-bar > .transparent-btn > img:hover {
