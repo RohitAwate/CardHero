@@ -2,6 +2,9 @@ import {Component} from "react";
 
 import "./Folder.css";
 
+const CHEVRON_DOWN = "/icons/chevron-down-48.png";
+const CHEVRON_RIGHT = "/icons/chevron-right-48.png";
+
 class Folder extends Component {
     state = {
         expanded: false
@@ -23,9 +26,9 @@ class Folder extends Component {
 
         let icon;
         if (this.state.expanded) {
-            icon = "/icons/chevron-down-48.png";
+            icon = CHEVRON_DOWN;
         } else {
-            icon = "/icons/chevron-right-48.png";
+            icon = CHEVRON_RIGHT;
         }
 
         const folderSelectedClass = this.props.folder.id === this.props.selectedFolder ? " folder-selected" : "";
