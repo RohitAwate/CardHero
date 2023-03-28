@@ -4,7 +4,7 @@ import "./Folder.css";
 
 class Folder extends Component {
     state = {
-        expanded: true
+        expanded: false
     }
 
     onFolderClick = (e) => {
