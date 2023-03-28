@@ -117,6 +117,10 @@ func ResolveFolder(path string, user models.User) (*models.Folder, error) {
 		return nil, err
 	}
 
+	if folder.ID == uuid.Nil {
+		return nil, fmt.Errorf("folder not found: %s", path)
+	}
+
 	return &folder, nil
 }
 

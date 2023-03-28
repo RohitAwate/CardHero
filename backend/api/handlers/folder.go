@@ -31,17 +31,20 @@ func GetFolders(w http.ResponseWriter, r *http.Request) {
 
 	pathRoot, err := db.ResolveFolder(path, *user)
 	if err != nil {
-		// TODO
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	fh, err := db.GetFolderHierarchy(*pathRoot)
 	if err != nil {
-		// TODO
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	fhJSON, err := json.Marshal(fh)
 	if err != nil {
-		// TODO
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Add("content-type", "application/json")
@@ -70,7 +73,7 @@ func GetCardsFromFolder(w http.ResponseWriter, r *http.Request) {
 
 	cards, err := db.GetCardsInFolder(folderID, *user)
 	if err != nil {
-		http.NotFoundHandler()
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 

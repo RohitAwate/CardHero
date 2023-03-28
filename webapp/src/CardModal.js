@@ -29,7 +29,6 @@ class CardModal extends Component {
     render() {
         const card = this.props.card;
         const folderPath = this.props.folderPath;
-        console.log(folderPath);
 
         return <div className="card-modal-container" onClick={this.props.onExit} onKeyDown={this.onKeyDown}>
             <div
