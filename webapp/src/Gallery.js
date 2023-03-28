@@ -19,7 +19,7 @@ class Gallery extends Component {
     render() {
         return <div id="gallery">
             {
-                this.state.cardModal ? <CardModal card={this.state.cardModal} onExit={this.onModalExit} /> : ""
+                this.state.cardModal ? <CardModal card={this.state.cardModal} folderPath={this.props.folderPath} onExit={this.onModalExit} /> : ""
             }
             {
                 this.props.cards.length > 0 ?

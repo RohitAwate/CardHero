@@ -40,8 +40,9 @@ class Explorer extends Component {
         return <div id="card-explorer">
             <TopBar/>
             <div id="card-explorer-main">
-                <LeftPane selectedFolder={this.state.selectedFolderID} onFolderSelect={this.onFolderSelect} folders={this.props.folders}/>
-                <Gallery cards={this.state.cards}/>
+                <LeftPane selectedFolder={this.state.selectedFolderID} onFolderSelect={this.onFolderSelect}
+                          folders={this.props.folders}/>
+                <Gallery cards={this.state.cards} folderPath={this.props.getFolderPath(this.state.selectedFolderID)}/>
             </div>
         </div>;
     }

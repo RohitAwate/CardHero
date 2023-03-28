@@ -38,9 +38,34 @@ class App extends Component {
         }
     }
 
+    getFolderPath = (folderID) => {
+        if (!this.state.folders) {
+            return [];
+        }
+
+        const dfs = (children, parentPath) => {
+            for (const child of children) {
+                const childPath = parentPath.concat(child.name);
+
+                if (child.id === folderID) {
+                    return childPath;
+                } else {
+                    const result = dfs(child.children, childPath);
+                    if (result !== childPath) {
+                        return result;
+                    }
+                }
+            }
+
+            return parentPath;
+        };
+
+        return dfs(this.state.folders, []);
+    }
+
     render() {
         return <div id="app-container">
-            <Explorer folders={this.state.folders}/>
+            <Explorer folders={this.state.folders} getFolderPath={this.getFolderPath}/>
             <Chat onNewCard={this.onNewCard}/>
         </div>;
     }

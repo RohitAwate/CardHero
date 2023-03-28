@@ -28,7 +28,8 @@ class CardModal extends Component {
 
     render() {
         const card = this.props.card;
-        const folders = ["Folder", "Sub-folder", "Another sub-folder"];
+        const folderPath = this.props.folderPath;
+        console.log(folderPath);
 
         return <div className="card-modal-container" onClick={this.props.onExit} onKeyDown={this.onKeyDown}>
             <div
@@ -51,7 +52,7 @@ class CardModal extends Component {
                 <div className="card-modal-bottom-bar">
                     <div className="card-modal-nav-bar-folders-container">
                         {
-                            folders.map((folder, i, row) => {
+                            folderPath.map((folder, i, row) => {
                                 const link = <a key={i} className="folder-link" href="#">{folder}</a>;
                                 if (i + 1 === row.length) {
                                     return link;
