@@ -15,24 +15,30 @@ type Card struct {
 	FolderID uuid.UUID `json:"-" gorm:"not null"`
 	Folder   Folder    `json:"-"`
 
-	Contents      string `json:"contents,omitempty"`
-	ContentsIndex string `gorm:"type:tsvector"`
+	Contents       string `json:"contents,omitempty"`
+	SearchContents string `gorm:"type:tsvector;index"`
 }
 
 func SetupSearchIndexTrigger(conn *gorm.DB) {
 	// Setup full-text search trigger
 	query := `
+		CREATE INDEX search_contents_index
+			ON cards
+			USING GIN (search_contents);
+
 		CREATE OR REPLACE FUNCTION card_tsvector_trigger() RETURNS trigger AS $$
 		begin
-		  -- Replace all non-word characters with a space
-		  new.contents := regexp_replace(new.contents, '\W+', ' ', 'g');
-		  new.contents_index := to_tsvector(new.contents);
-		  return new;
+			-- Replace all non-word characters with a space
+			new.contents := regexp_replace(new.contents, '\W+', ' ', 'g');
+			new.search_contents := to_tsvector(new.contents);
+			return new;
 		end
 		$$ LANGUAGE plpgsql;
 
-		CREATE TRIGGER cards_search_index_update BEFORE INSERT OR UPDATE
-		ON cards FOR EACH ROW EXECUTE PROCEDURE card_tsvector_trigger();
+		CREATE OR REPLACE TRIGGER cards_search_index_update
+			BEFORE INSERT OR UPDATE
+			ON cards FOR EACH ROW
+			EXECUTE PROCEDURE card_tsvector_trigger();
 	`
 
 	if err := conn.Exec(query).Error; err != nil {
