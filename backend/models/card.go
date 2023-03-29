@@ -22,7 +22,7 @@ type Card struct {
 func SetupSearchIndexTrigger(conn *gorm.DB) {
 	// Setup full-text search trigger
 	query := `
-		CREATE INDEX search_contents_index
+		CREATE INDEX IF NOT EXISTS search_contents_index
 			ON cards
 			USING GIN (search_contents);
 
