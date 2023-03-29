@@ -16,7 +16,7 @@ type Card struct {
 	Folder   Folder    `json:"-"`
 
 	Contents       string `json:"contents,omitempty"`
-	SearchContents string `gorm:"type:tsvector;index"`
+	SearchContents string `json:"-" gorm:"type:tsvector;index"`
 }
 
 func SetupSearchIndexTrigger(conn *gorm.DB) {
@@ -27,10 +27,12 @@ func SetupSearchIndexTrigger(conn *gorm.DB) {
 			USING GIN (search_contents);
 
 		CREATE OR REPLACE FUNCTION card_tsvector_trigger() RETURNS trigger AS $$
+		DECLARE
+			processed_contents TEXT;
 		begin
 			-- Replace all non-word characters with a space
-			new.contents := regexp_replace(new.contents, '\W+', ' ', 'g');
-			new.search_contents := to_tsvector(new.contents);
+			processed_contents := regexp_replace(new.contents, '\W+', ' ', 'g');
+			new.search_contents := to_tsvector(processed_contents);
 			return new;
 		end
 		$$ LANGUAGE plpgsql;
