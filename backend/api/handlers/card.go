@@ -13,7 +13,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	user, err := db.GetUser(username)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
@@ -52,7 +52,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 
 	user, err := db.GetUser(username)
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
