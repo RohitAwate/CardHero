@@ -31,10 +31,14 @@ func init() {
 
 	log.Println("Connected to database")
 
+	log.Println("Running auto-migrations")
 	err = database.AutoMigrate(models.GetAll()...)
 	if err != nil {
 		panic(err)
 	}
+
+	log.Println("Setting up triggers")
+	models.SetupTriggers(database)
 
 	log.Println("Database initialized")
 }
