@@ -4,10 +4,12 @@ import Chat from "./Chat";
 import "./App.css";
 import Explorer from "./Explorer";
 import axios from "axios";
+import SearchModal from "./SearchModal";
 
 class App extends Component {
     state = {
-        folders: []
+        folders: [],
+        search: false,
     }
 
     async componentDidMount() {
@@ -63,10 +65,24 @@ class App extends Component {
         return dfs(this.state.folders, []);
     }
 
+    onKeyDown = (e) => {
+        if (e.ctrlKey && e.key === "k") {
+            e.preventDefault();
+            this.setState({...this.state.folders, search: !this.state.search});
+        }
+    }
+
+    onSearchExit = () => {
+        this.setState({...this.state.folders, search: false});
+    }
+
     render() {
-        return <div id="app-container">
+        return <div id="app-container" onKeyDown={this.onKeyDown}>
             <Explorer folders={this.state.folders} getFolderPath={this.getFolderPath}/>
             <Chat onNewCard={this.onNewCard}/>
+            {
+                this.state.search ? <SearchModal onExit={this.onSearchExit} /> : ""
+            }
         </div>;
     }
 }

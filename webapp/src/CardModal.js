@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 
+import "./Modal.css";
 import "./CardModal.css";
 import Card from "./Card";
 
@@ -30,7 +31,7 @@ class CardModal extends Component {
         const card = this.props.card;
         const folderPath = this.props.folderPath;
 
-        return <div className="card-modal-container" onClick={this.props.onExit} onKeyDown={this.onKeyDown}>
+        return <div className="modal-container" onClick={this.props.onExit} onKeyDown={this.onKeyDown}>
             <div
                 className="card-modal"
                 onClick={event => event.stopPropagation()}
