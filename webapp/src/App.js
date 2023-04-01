@@ -13,6 +13,7 @@ class App extends Component {
     }
 
     async componentDidMount() {
+        document.addEventListener('keydown', this.onKeyDown);
         await this.fetchCards();
     }
 
@@ -76,8 +77,12 @@ class App extends Component {
         this.setState({...this.state.folders, search: false});
     }
 
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.onKeyDown);
+    }
+
     render() {
-        return <div id="app-container" onKeyDown={this.onKeyDown}>
+        return <div id="app-container">
             <Explorer folders={this.state.folders} getFolderPath={this.getFolderPath}/>
             <Chat onNewCard={this.onNewCard}/>
             {
