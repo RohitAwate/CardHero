@@ -2,10 +2,15 @@ import React, {Component} from "react";
 
 import "./Modal.css";
 import "./SearchModal.css";
+import axios from "axios";
 
 class SearchModal extends Component {
+    static SEARCH_TYPING_DELAY = 200;
+
     state = {
-        mouseInside: false
+        mouseInside: false,
+        results: [],
+        typingTimeoutID: null,
     }
 
     onMouseMovement = (inside) => {
@@ -26,6 +31,24 @@ class SearchModal extends Component {
         document.removeEventListener("keydown", this.onKeyDown, false);
     }
 
+    onQueryTyped = (e) => {
+        const newQuery = e.target.value;
+
+        if (this.state.typingTimeoutID) {
+            clearTimeout(this.state.typingTimeoutID);
+        }
+
+        const typingTimeoutID = setTimeout(async () => {
+            const resp = await axios.get("/api/rohit/search", {params: {query: newQuery}});
+            if (resp.status === 200) {
+                const results = resp.data;
+                this.setState({results})
+            }
+        }, SearchModal.SEARCH_TYPING_DELAY);
+
+        this.setState({typingTimeoutID});
+    }
+
     render() {
         return <div className="modal-container" onClick={this.props.onExit} onKeyDown={this.onKeyDown}>
             <div
@@ -35,8 +58,15 @@ class SearchModal extends Component {
                 onMouseLeave={_ => this.onMouseMovement(false)}
             >
                 <div id="search-input-container">
-                    <img src="/icons/search-50.png" alt="search-icon" width={20} />
-                    <input autoFocus placeholder="Search or jump to" id="search-input" />
+                    <img src="/icons/search-50.png" alt="search-icon" width={20}/>
+                    <input autoFocus onChange={this.onQueryTyped} placeholder="Search or jump to" id="search-input"/>
+                </div>
+                <div>
+                    {
+                        this.state.results.map(result => {
+                            return <h3>{result.contents}</h3>;
+                        })
+                    }
                 </div>
             </div>
         </div>;
