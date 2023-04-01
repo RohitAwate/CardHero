@@ -1,4 +1,7 @@
 .search-modal {
+    position: absolute;
+    top: 15vh;
+
     background-color: white;
 
     max-width: 40vw;
@@ -8,7 +11,6 @@
     /*min-height: 5vh;*/
 
     border-radius: 10px;
-    padding: 10px 20px;
 
     overflow-y: auto;
 
@@ -22,6 +24,7 @@
 #search-input-container {
     display: flex;
     align-items: center;
+    padding: 10px 20px;
 }
 
 #search-input {
@@ -32,4 +35,29 @@
     outline: 0;
 
     font-size: 1.2em;
+    color: #303030;
+}
+
+.search-result-anchor,
+.search-result-anchor:hover {
+    text-decoration: none;
+}
+
+.search-result {
+    padding: 5px 20px;
+    vertical-align: center;
+    color: #404040;
+}
+
+.search-result > p {
+    line-height: 1em;
+    font-size: 0.9em;
+    max-height: 2em;
+
+    overflow: clip;
+    text-overflow: ellipsis;
+}
+
+.search-result:hover {
+    background-color: #ddd;
 }

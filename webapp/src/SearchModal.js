@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import "./Modal.css";
 import "./SearchModal.css";
 import axios from "axios";
+import Card from "./Card";
 
 class SearchModal extends Component {
     static SEARCH_TYPING_DELAY = 200;
@@ -59,18 +60,28 @@ class SearchModal extends Component {
             >
                 <div id="search-input-container">
                     <img src="/icons/search-50.png" alt="search-icon" width={20}/>
-                    <input autoFocus onChange={this.onQueryTyped} placeholder="Search or jump to" id="search-input"/>
+                    <input autoComplete={"off"} autoFocus onChange={this.onQueryTyped} placeholder="Search or jump to" id="search-input"/>
                 </div>
                 <div>
                     {
-                        this.state.results.map(result => {
-                            return <h3>{result.contents}</h3>;
-                        })
+                        this.state.results.map(result => <SearchResult key={result.id} result={result}/>)
                     }
                 </div>
             </div>
         </div>;
     }
+}
+
+function SearchResult(props) {
+    const result = props.result;
+    const formattedTime = Card.renderTimestamp(result.timestamp);
+
+    return <a href={`/cards/${result.id}`} className="search-result-anchor">
+        <div className="search-result">
+            <p>{result.contents}</p>
+            <div className="timestamp">{formattedTime}</div>
+        </div>
+    </a>;
 }
 
 export default SearchModal;
