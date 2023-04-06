@@ -34,7 +34,8 @@ func NewFolder(name string, parent *Folder, owner User) Folder {
 }
 
 const (
-	RootFolderName = "Root"
+	RootFolderName    = "Root"
+	DefaultFolderName = "Default"
 )
 
 func NewRoot(owner User) Folder {
