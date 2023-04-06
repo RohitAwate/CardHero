@@ -2,6 +2,7 @@ import {Component} from "react";
 
 import "./Card.css";
 import "./Common.css";
+import {Link} from "react-router-dom";
 
 class Card extends Component {
     static renderTimestamp(timestamp) {
@@ -34,10 +35,12 @@ class Card extends Component {
         const card = this.props.card;
         const formattedTime = Card.renderTimestamp(card.timestamp);
 
-        return <div className="card" onClick={_ => this.props.onCardClick(card)}>
-            <p className="card-content">{card.contents}</p>
-            <div className="timestamp">{formattedTime}</div>
-        </div>;
+        return <Link to={`/cards/${card.id}`}>
+            <div className="card">
+                <p className="card-content">{card.contents}</p>
+                <div className="timestamp">{formattedTime}</div>
+            </div>
+        </Link>;
     }
 }
 

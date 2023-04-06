@@ -24,7 +24,8 @@ class Folder extends Component {
             icon = CHEVRON_RIGHT;
         }
 
-        const folderSelectedClass = "/" + this.props.path === this.props.selectedFolder ? " folder-selected" : "";
+        const thisFolderSelected = "/" + this.props.path === this.props.selectedFolder;
+        const folderSelectedClass = thisFolderSelected ? " folder-selected" : "";
 
         return <Link to={`/folders/${this.props.path}`}>
             <div id="folder-container" style={style}>

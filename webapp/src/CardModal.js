@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import "./Modal.css";
 import "./CardModal.css";
 import Card from "./Card";
+import {Link, Navigate} from "react-router-dom";
 
 class CardModal extends Component {
     state = {
@@ -15,7 +16,7 @@ class CardModal extends Component {
 
     onKeyDown = (e) => {
         if (e.key === "Escape") {
-            this.props.onExit();
+            return <Navigate to=".."/>
         }
     }
 
@@ -29,45 +30,49 @@ class CardModal extends Component {
 
     render() {
         const card = this.props.card;
-        const folderPath = this.props.folderPath;
+        const folderPath = ["See", "My", "Dummy", "Folder", "Path"];
 
-        return <div className="modal-container" onClick={this.props.onExit} onKeyDown={this.onKeyDown}>
-            <div
-                className="card-modal"
-                onClick={event => event.stopPropagation()}
-                onMouseOver={_ => this.onMouseMovement(true)}
-                onMouseLeave={_ => this.onMouseMovement(false)}
-            >
-                <div className="card-modal-nav-bar">
-                    {
-                        this.state.mouseInside ?
-                            <button onClick={this.props.onExit} className="transparent-btn">
-                                <img src="/icons/close-cross-48.png" alt="close-cross-icon"/>
-                            </button> : ""
-                    }
-                </div>
-                <div className="card-modal-body">
-                    <p>{card.contents}</p>
-                </div>
-                <div className="card-modal-bottom-bar">
-                    <div className="card-modal-nav-bar-folders-container">
+        return <Link to=".." relative="path">
+            <div className="modal-container" onKeyDown={this.onKeyDown}>
+                <div
+                    className="card-modal"
+                    onClick={event => event.stopPropagation()}
+                    onMouseOver={_ => this.onMouseMovement(true)}
+                    onMouseLeave={_ => this.onMouseMovement(false)}
+                >
+                    <div className="card-modal-nav-bar">
                         {
-                            folderPath.map((folder, i, row) => {
-                                const link = <a key={i} className="folder-link" href="#">{folder}</a>;
-                                if (i + 1 === row.length) {
-                                    return link;
-                                } else {
-                                    const spacerKey = `${folder}-${i}-spacer`;
-                                    return [link, <p key={spacerKey} className="folder-link-spacer">⟩</p>];
-                                }
-                            })
+                            this.state.mouseInside ?
+                                <Link to=".." relative="path">
+                                    <button className="transparent-btn">
+                                        <img src="/icons/close-cross-48.png" alt="close-cross-icon"/>
+                                    </button>
+                                </Link> : ""
                         }
                     </div>
+                    <div className="card-modal-body">
+                        <p>{card.contents}</p>
+                    </div>
+                    <div className="card-modal-bottom-bar">
+                        <div className="card-modal-nav-bar-folders-container">
+                            {
+                                folderPath.map((folder, i, row) => {
+                                    const link = <a key={i} className="folder-link" href="#">{folder}</a>;
+                                    if (i + 1 === row.length) {
+                                        return link;
+                                    } else {
+                                        const spacerKey = `${folder}-${i}-spacer`;
+                                        return [link, <p key={spacerKey} className="folder-link-spacer">⟩</p>];
+                                    }
+                                })
+                            }
+                        </div>
 
-                    <p className="timestamp">{Card.renderTimestamp(card.timestamp)}</p>
+                        <p className="timestamp">{Card.renderTimestamp(card.timestamp)}</p>
+                    </div>
                 </div>
             </div>
-        </div>;
+        </Link>;
     }
 }
 

@@ -17,7 +17,6 @@ class Explorer extends Component {
                     <Route path={"/"} element={<Navigate to={this.DEFAULT_FOLDER}/>}/>
                     <Route path={"/folders/*"} element={<ExplorerMeta/>}/>
                 </Routes>
-
             </div>
         </div>;
     }
@@ -31,7 +30,7 @@ function ExplorerMeta() {
 
     return <>
         <LeftPane selectedFolder={selectedFolder}/>
-        {/*<Gallery selectedFolder={selectedFolder}/>*/}
+        <Gallery selectedFolder={selectedFolder}/>
     </>;
 }
 

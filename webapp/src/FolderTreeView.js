@@ -9,11 +9,20 @@ class FolderTreeView extends Component {
         folders: []
     }
 
-    async componentDidMount() {
+    async refresh() {
         const resp = await axios.get("/api/rohit/folders/");
         if (resp.status === 200) {
             this.setState({folders: resp.data.children});
         }
+    }
+
+    async componentDidMount() {
+        await this.refresh();
+    }
+
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        // TODO: Refresh only if folders have changed
+        await this.refresh();
     }
 
     render() {
