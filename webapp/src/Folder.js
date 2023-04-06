@@ -1,20 +1,13 @@
 import {Component} from "react";
 
 import "./Folder.css";
+import {Link} from "react-router-dom";
 
 const CHEVRON_DOWN = "/icons/chevron-down-48.png";
 const CHEVRON_RIGHT = "/icons/chevron-right-48.png";
 
 class Folder extends Component {
-    state = {
-        expanded: false
-    }
-
-    onFolderClick = (e) => {
-        this.setState({expanded: !this.state.expanded});
-        e.folderID = this.props.folder.id;
-        this.props.onFolderSelect(e);
-    }
+    state = {expanded: false}
 
     render() {
         const style = {
@@ -31,31 +24,36 @@ class Folder extends Component {
             icon = CHEVRON_RIGHT;
         }
 
-        const folderSelectedClass = this.props.folder.id === this.props.selectedFolder ? " folder-selected" : "";
+        const folderSelectedClass = "/" + this.props.path === this.props.selectedFolder ? " folder-selected" : "";
 
-        return <div id="folder-container" style={style}>
-            {
-                hasChildren ?
-                    <span className={"folder-name" + folderSelectedClass} onClick={this.onFolderClick}>
+        return <Link to={`/folders/${this.props.path}`}>
+            <div id="folder-container" style={style}>
+                {
+                    hasChildren ?
+                        <span className={"folder-name" + folderSelectedClass}>
                         <p>{this.props.folder.name}</p>
                         <img className="folder-chevron" alt="chevron" src={icon}/>
                     </span>
-                    :
-                    <span className={"folder-name" + folderSelectedClass} onClick={this.onFolderClick}>
+                        :
+                        <span className={"folder-name" + folderSelectedClass}>
                         <p>{this.props.folder.name}</p>
                     </span>
-            }
-            {
-                this.state.expanded ?
-                    this.props.folder.children.map(
-                        child => <Folder selected={child.id === this.props.selectedFolder}
-                                         selectedFolder={this.props.selectedFolder}
-                                         key={child.id} onFolderSelect={this.props.onFolderSelect}
-                                         offset={childOffset} indent={this.props.indent} folder={child}/>
-                    )
-                    : ""
-            }
-        </div>;
+                }
+                {
+                    this.state.expanded ?
+                        this.props.folder.children.map(
+                            child => <Folder selected={child.id === this.props.selectedFolder}
+                                             selectedFolder={this.props.selectedFolder}
+                                             key={child.id} onFolderSelect={this.props.onFolderSelect}
+                                             offset={childOffset} indent={this.props.indent} folder={child}
+                                             path={`${this.props.path}/${child.name}`}
+                            />
+                        )
+                        : ""
+                }
+            </div>
+        </Link>
+            ;
     }
 }
 
