@@ -22,7 +22,7 @@ class FolderTreeView extends Component {
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
         // TODO: Refresh only if folders have changed
-        await this.refresh();
+        // await this.refresh();
     }
 
     render() {

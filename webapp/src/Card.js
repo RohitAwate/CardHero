@@ -35,7 +35,7 @@ class Card extends Component {
         const card = this.props.card;
         const formattedTime = Card.renderTimestamp(card.timestamp);
 
-        return <Link to={`/cards/${card.id}`}>
+        return <Link to={`/folders${this.props.selectedFolder}?card=${card.id}`}>
             <div className="card">
                 <p className="card-content">{card.contents}</p>
                 <div className="timestamp">{formattedTime}</div>

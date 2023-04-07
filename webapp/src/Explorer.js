@@ -16,6 +16,7 @@ class Explorer extends Component {
                 <Routes>
                     <Route path={"/"} element={<Navigate to={this.DEFAULT_FOLDER}/>}/>
                     <Route path={"/folders/*"} element={<ExplorerMeta/>}/>
+                    <Route path={"/cards/:id"} element={<ExplorerMeta/>}/>
                 </Routes>
             </div>
         </div>;

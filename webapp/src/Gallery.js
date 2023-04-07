@@ -4,10 +4,15 @@ import "./Gallery.css";
 import Loader from "./Loader";
 import Card from "./Card";
 import axios from "axios";
-import {Outlet, Route, Routes} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 import CardModal from "./CardModal";
 
-class Gallery extends Component {
+function Gallery(props) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    return <GalleryMeta selectedFolder={props.selectedFolder} modalCardID={searchParams.get("card")}/>;
+}
+
+class GalleryMeta extends Component {
     state = {
         cards: []
     };
@@ -25,6 +30,13 @@ class Gallery extends Component {
     }
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
+        // Don't re-render if user clicks on one of the cards
+        for (const card of this.state.cards) {
+            if (prevProps.selectedFolder === card.id) {
+                this.setState(prevState);
+            }
+        }
+
         if (this.props.selectedFolder !== prevProps.selectedFolder) {
             this.setState({cards: []});
             await this.refresh()
@@ -33,23 +45,17 @@ class Gallery extends Component {
 
     render() {
         return <div id="gallery">
-            <CardsMosaic cards={this.state.cards}/>
-            <Routes>
-                <Route path={"/cards/:id"} element={<CardModal/>}/>
-            </Routes>
+            {
+                this.state.cards.length > 0 ?
+                    this.state.cards.map(card => <Card selectedFolder={this.props.selectedFolder} key={card.id}
+                                                       card={card}/>)
+                    : <Loader/>
+            }
+            {
+                this.props.modalCardID !== null ? <CardModal cardID={this.props.modalCardID}/> : ""
+            }
         </div>;
     }
-}
-
-function CardsMosaic(props) {
-    return <>
-        {
-            props.cards.length > 0 ?
-                props.cards.map(card => <Card key={card.id} card={card}/>)
-                : <Loader/>
-        }
-        <Outlet/>
-    </>;
 }
 
 export default Gallery;
