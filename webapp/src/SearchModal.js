@@ -17,6 +17,8 @@ class SearchModal extends Component {
         typingTimer: null,
     }
 
+    modalRef = React.createRef();
+
     onMouseMovement = (inside) => {
         this.setState({mouseInside: inside});
     }
@@ -40,10 +42,18 @@ class SearchModal extends Component {
 
     componentDidMount() {
         document.addEventListener("keydown", this.onKeyDown, false);
+        document.addEventListener("mousedown", this.onClickOutside);
     }
 
     componentWillUnmount() {
         document.removeEventListener("keydown", this.onKeyDown, false);
+        document.removeEventListener("mousedown", this.onClickOutside);
+    }
+
+    onClickOutside = (e) => {
+        if (this.modalRef && !this.modalRef.current.contains(e.target)) {
+            return this.hideSearch();
+        }
     }
 
     onQueryTyped = (e) => {
@@ -68,6 +78,7 @@ class SearchModal extends Component {
         if (this.state.show) {
             return <div className="modal-container">
                 <div
+                    ref={this.modalRef}
                     className="search-modal"
                     onClick={event => event.stopPropagation()}
                     onMouseOver={_ => this.onMouseMovement(true)}

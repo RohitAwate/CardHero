@@ -29,7 +29,7 @@ class CardModalMeta extends Component {
 
     modalRef = React.createRef();
 
-    async componentDidMount() {
+    componentDidMount() {
         document.addEventListener("keydown", this.onKeyDown, false);
         document.addEventListener("mousedown", this.onClickOutside);
     }
