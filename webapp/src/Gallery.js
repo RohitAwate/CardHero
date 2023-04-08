@@ -14,13 +14,21 @@ function Gallery(props) {
 
 class GalleryMeta extends Component {
     state = {
-        cards: []
+        // Might seem redundant to store both an array and a map for cards
+        // but need to retain the order and also have quick lookup by card ID.
+        cards: [],
+        cardsIndex: {}
     };
 
     async refresh() {
         const resp = await axios.get(`/api/rohit/cards/${this.props.selectedFolder}`);
         if (resp.status === 200) {
             const cards = resp.data;
+
+            for (const card of cards) {
+                this.state.cardsIndex[card.id] = card;
+            }
+
             this.setState({cards});
         }
     }
@@ -44,6 +52,9 @@ class GalleryMeta extends Component {
     }
 
     render() {
+        const modalRequested = this.props.modalCardID !== null;
+        const modalCard = this.state.cardsIndex[this.props.modalCardID];
+
         return <div id="gallery">
             {
                 this.state.cards.length > 0 ?
@@ -52,7 +63,7 @@ class GalleryMeta extends Component {
                     : <Loader/>
             }
             {
-                this.props.modalCardID !== null ? <CardModal cardID={this.props.modalCardID}/> : ""
+                modalRequested ? <CardModal card={modalCard}/> : <></>
             }
         </div>;
     }

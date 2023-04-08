@@ -3,35 +3,31 @@ import React, {Component} from "react";
 import "./Modal.css";
 import "./CardModal.css";
 import Card from "./Card";
-import {Link, useNavigate} from "react-router-dom";
-import axios from "axios";
+import {Link, useSearchParams} from "react-router-dom";
+import Loader from "./Loader";
 
 function CardModal(props) {
-    const navigate = useNavigate();
-    return <CardModalMeta navigate={navigate} cardID={props.cardID}/>;
+    const [searchParams, setSearchParams] = useSearchParams();
+    const closeModal = () => {
+        if (searchParams.has("card")) {
+            searchParams.delete("card");
+            setSearchParams(searchParams);
+        }
+    };
+
+    return <CardModalMeta closeModal={closeModal} card={props.card}/>;
 }
 
 class CardModalMeta extends Component {
     state = {
         mouseInside: false,
-        card: {},
     };
 
     modalRef = React.createRef();
 
-    async refresh() {
-        const resp = await axios.get(`/api/rohit/card/${this.props.cardID}`);
-        if (resp.status === 200) {
-            const card = resp.data;
-            this.setState({card});
-        }
-    }
-
     async componentDidMount() {
         document.addEventListener("keydown", this.onKeyDown, false);
         document.addEventListener("mousedown", this.onClickOutside);
-
-        await this.refresh();
     }
 
     componentWillUnmount() {
@@ -43,24 +39,20 @@ class CardModalMeta extends Component {
         this.setState({mouseInside: inside});
     }
 
-    closeModal = () => {
-        return this.props.navigate(-1);
-    }
-
     onClickOutside = (e) => {
         if (this.modalRef && !this.modalRef.current.contains(e.target)) {
-            return this.closeModal();
+            return this.props.closeModal();
         }
     }
 
     onKeyDown = (e) => {
         if (e.key === "Escape") {
-            return this.closeModal();
+            return this.props.closeModal();
         }
     }
 
     render() {
-        const card = this.state.card;
+        const card = this.props.card;
         const folderPath = ["See", "My", "Dummy", "Folder", "Path"];
 
         return <div className="modal-container" onKeyDown={this.onKeyDown}>
@@ -80,7 +72,7 @@ class CardModalMeta extends Component {
                     }
                 </div>
                 <div className="card-modal-body">
-                    <p>{card.contents}</p>
+                    {card ? <p>{card.contents}</p> : <Loader/>}
                 </div>
                 <div className="card-modal-bottom-bar">
                     <div className="card-modal-nav-bar-folders-container">
@@ -96,8 +88,13 @@ class CardModalMeta extends Component {
                             })
                         }
                     </div>
-
-                    <p className="timestamp">{Card.renderTimestamp(card.timestamp)}</p>
+                    <p className="timestamp">
+                        {
+                            card ?
+                            Card.renderTimestamp(card.timestamp)
+                                : <Loader size={30} />
+                        }
+                    </p>
                 </div>
             </div>
         </div>;
