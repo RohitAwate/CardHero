@@ -15,7 +15,11 @@ function CardModal(props) {
         }
     };
 
-    return <CardModalMeta closeModal={closeModal} card={props.card}/>;
+    return <CardModalMeta
+        card={props.card}
+        folderPath={props.folderPath}
+        closeModal={closeModal}
+    />;
 }
 
 class CardModalMeta extends Component {
@@ -53,7 +57,7 @@ class CardModalMeta extends Component {
 
     render() {
         const card = this.props.card;
-        const folderPath = ["See", "My", "Dummy", "Folder", "Path"];
+        const folderPath = this.props.folderPath;
 
         return <div className="modal-container" onKeyDown={this.onKeyDown}>
             <div
@@ -91,8 +95,8 @@ class CardModalMeta extends Component {
                     <p className="timestamp">
                         {
                             card ?
-                            Card.renderTimestamp(card.timestamp)
-                                : <Loader size={30} />
+                                Card.renderTimestamp(card.timestamp)
+                                : <Loader size={30}/>
                         }
                     </p>
                 </div>

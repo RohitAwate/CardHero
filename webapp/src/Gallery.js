@@ -53,9 +53,15 @@ class GalleryMeta extends Component {
         }
     }
 
+    getFolderPath = () => {
+        const folders = this.props.selectedFolder.split("/");
+        return folders.slice(1);    // Skipping the first empty substring
+    }
+
     render() {
         const modalRequested = this.props.modalCardID !== null;
         const modalCard = this.state.cardsIndex[this.props.modalCardID];
+        const folderPath = this.getFolderPath();
 
         return <div id="gallery">
             {
@@ -65,7 +71,7 @@ class GalleryMeta extends Component {
                     : this.state.loaded ? <EmptyFolder/> : <Loader/>
             }
             {
-                modalRequested ? <CardModal card={modalCard}/> : <></>
+                modalRequested ? <CardModal card={modalCard} folderPath={folderPath}/> : <></>
             }
         </div>;
     }
