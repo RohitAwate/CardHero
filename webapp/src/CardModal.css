@@ -82,6 +82,11 @@
     margin: 0 3px;
 }
 
+.folder-link:hover {
+    color: #666;
+    text-decoration: underline;
+}
+
 .card-modal-bottom-bar > .timestamp {
     padding: 0;
 }

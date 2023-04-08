@@ -57,7 +57,19 @@ class CardModalMeta extends Component {
 
     render() {
         const card = this.props.card;
-        const folderPath = this.props.folderPath;
+
+        let linkPath = "/folders";
+        const folderPath = this.props.folderPath.map((folder, i, row) => {
+            linkPath += "/" + folder;
+            const link = <Link key={i} className="folder-link" to={linkPath}>{folder}</Link>;
+
+            if (i + 1 === row.length) {
+                return link;
+            } else {
+                const spacerKey = `${folder}-${i}-spacer`;
+                return [link, <p key={spacerKey} className="folder-link-spacer">⟩</p>];
+            }
+        });
 
         return <div className="modal-container" onKeyDown={this.onKeyDown}>
             <div
@@ -80,17 +92,7 @@ class CardModalMeta extends Component {
                 </div>
                 <div className="card-modal-bottom-bar">
                     <div className="card-modal-nav-bar-folders-container">
-                        {
-                            folderPath.map((folder, i, row) => {
-                                const link = <a key={i} className="folder-link" href="#">{folder}</a>;
-                                if (i + 1 === row.length) {
-                                    return link;
-                                } else {
-                                    const spacerKey = `${folder}-${i}-spacer`;
-                                    return [link, <p key={spacerKey} className="folder-link-spacer">⟩</p>];
-                                }
-                            })
-                        }
+                        {folderPath}
                     </div>
                     <p className="timestamp">
                         {
