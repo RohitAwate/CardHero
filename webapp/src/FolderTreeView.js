@@ -26,13 +26,15 @@ class FolderTreeView extends Component {
     }
 
     render() {
+        const indent = this.props.indent ? this.props.indent : 10;
+
         return <div id="folder-tree-view">
             <p id="left-pane-section-label">F O L D E R S</p>
             {
                 this.state.folders.map(folder => {
                     return <Folder
                         path={`${folder.name}`} selectedFolder={this.props.selectedFolder}
-                        key={folder.id} offset={0} indent={this.props.indent}
+                        key={folder.id} offset={0} indent={indent}
                         folder={folder}/>
                 })
             }
