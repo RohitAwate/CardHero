@@ -5,6 +5,7 @@ import "./SearchModal.css";
 import "./Common.css";
 import axios from "axios";
 import Card from "./Card";
+import {useNavigate} from "react-router-dom";
 
 class SearchModal extends Component {
     static SEARCH_TYPING_DELAY = 200;
@@ -20,11 +21,15 @@ class SearchModal extends Component {
         this.setState({mouseInside: inside});
     }
 
+    hideSearch = () => {
+        const show = false;
+        const results = [];
+        this.setState({show, results});
+    }
+
     onKeyDown = (e) => {
         if (e.key === "Escape") {
-            const show = false;
-            const results = [];
-            this.setState({show, results});
+            this.hideSearch();
         } else if (e.ctrlKey && e.key === "k") {
             e.preventDefault();
             const show = !this.state.show;
@@ -48,7 +53,7 @@ class SearchModal extends Component {
             clearTimeout(this.state.typingTimer);
         }
 
-        const typingTimeoutID = setTimeout(async () => {
+        const typingTimer = setTimeout(async () => {
             const resp = await axios.get("/api/rohit/search", {params: {query: newQuery}});
             if (resp.status === 200) {
                 const results = resp.data;
@@ -56,7 +61,7 @@ class SearchModal extends Component {
             }
         }, SearchModal.SEARCH_TYPING_DELAY);
 
-        this.setState({typingTimeoutID});
+        this.setState({typingTimer});
     }
 
     render() {
@@ -77,7 +82,8 @@ class SearchModal extends Component {
                     <div className="separator"></div>
                     <div id="search-results-container">
                         {
-                            this.state.results.map(result => <SearchResult key={result.id} result={result}/>)
+                            this.state.results.map(result => <SearchResult hideSearch={this.hideSearch} key={result.id}
+                                                                           result={result}/>)
                         }
                     </div>
                 </div>
@@ -89,13 +95,20 @@ class SearchModal extends Component {
 function SearchResult(props) {
     const result = props.result;
     const formattedTime = Card.renderTimestamp(result.timestamp);
+    const navigate = useNavigate();
 
-    return <a href={`/cards/${result.id}`} className="search-result-anchor">
-        <div className="search-result">
-            <p>{result.contents}</p>
-            <div className="timestamp">{formattedTime}</div>
-        </div>
-    </a>;
+    const onClickHandler = async (e) => {
+        const resp = await axios.get(`/api/rohit/card/goto/${props.result.id}`);
+        if (resp.status === 200) {
+            props.hideSearch();
+            return navigate(resp.data);
+        }
+    };
+
+    return <div className="search-result" onClick={onClickHandler}>
+        <p>{result.contents}</p>
+        <div className="timestamp">{formattedTime}</div>
+    </div>;
 }
 
 export default SearchModal;

@@ -110,3 +110,45 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
+
+func GetFolderPathByCardID(w http.ResponseWriter, r *http.Request) {
+	username := chi.URLParam(r, "username")
+	user, err := db.GetUser(username)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	cardIDStr := chi.URLParam(r, "cardID")
+	cardID, err := uuid.FromString(cardIDStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, "Invalid folder ID")
+		return
+	}
+
+	card, err := db.GetCardByID(*user, cardID)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	folderPath, err := db.GetFolderPathByID(card.FolderID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	redirectLocation := "/folders"
+	for _, folder := range folderPath {
+		redirectLocation += "/" + folder
+	}
+	redirectLocation += "?card=" + cardIDStr
+
+	w.Header().Add("content-type", "text/plain")
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write([]byte(redirectLocation))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}

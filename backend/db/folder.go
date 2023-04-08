@@ -184,3 +184,40 @@ func SaveFolder(folder *models.Folder) {
 		*folder = existingFolder
 	}
 }
+
+const (
+	resolveFolderPathCTE = `
+		with recursive folder_path as (
+			-- base case
+			select f.name, f.id, f.parent_id 
+			from folders f
+			where id = ?
+			
+			union all
+			
+			-- ancestors
+			select f.name, f.id, f.parent_id 
+			from folders f
+			inner join folder_path fp on fp.parent_id = f.id
+		)
+		select name from folder_path;
+	`
+)
+
+func GetFolderPathByID(folderID uuid.UUID) ([]string, error) {
+	conn := getConn()
+
+	var folders []string
+	err := conn.Raw(resolveFolderPathCTE, folderID).Scan(&folders).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// We need the array in reverse order
+	for i, j := 0, len(folders)-1; i < j; i, j = i+1, j-1 {
+		folders[i], folders[j] = folders[j], folders[i]
+	}
+
+	// Skipping "Root:
+	return folders[1:], nil
+}
