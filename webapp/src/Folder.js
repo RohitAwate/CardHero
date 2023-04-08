@@ -9,6 +9,26 @@ const CHEVRON_RIGHT = "/icons/chevron-right-48.png";
 class Folder extends Component {
     state = {expanded: false}
 
+    updateExpansion = () => {
+        const thisFolderSelected = "/" + this.props.path === this.props.selectedFolder;
+        if (thisFolderSelected) {
+            this.setState({expanded: true});
+        }
+    };
+
+    componentDidMount = this.updateExpansion;
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.selectedFolder !== this.props.selectedFolder) {
+            this.updateExpansion();
+        }
+    }
+
+    toggleExpansion = () => {
+        const expanded = !this.state.expanded;
+        this.setState({expanded});
+    }
+
     render() {
         const style = {
             marginLeft: this.props.offset
@@ -27,34 +47,35 @@ class Folder extends Component {
         const thisFolderSelected = "/" + this.props.path === this.props.selectedFolder;
         const folderSelectedClass = thisFolderSelected ? " folder-selected" : "";
 
-        return <Link to={`/folders/${this.props.path}`}>
-            <div id="folder-container" style={style}>
-                {
-                    hasChildren ?
-                        <span className={"folder-name" + folderSelectedClass}>
-                        <p>{this.props.folder.name}</p>
-                        <img className="folder-chevron" alt="chevron" src={icon}/>
+        return <>
+            <Link to={`/folders/${this.props.path}`}>
+                <div id="folder-container" onClick={this.toggleExpansion} style={style}>
+                    <span className={"folder-name" + folderSelectedClass}>
+                        {
+                            hasChildren ?
+                                <>
+                                    <p>{this.props.folder.name}</p>
+                                    <img className="folder-chevron" alt="chevron" src={icon}/>
+                                </>
+                                :
+                                <p>{this.props.folder.name}</p>
+                        }
                     </span>
-                        :
-                        <span className={"folder-name" + folderSelectedClass}>
-                        <p>{this.props.folder.name}</p>
-                    </span>
-                }
-                {
-                    this.state.expanded ?
-                        this.props.folder.children.map(
-                            child => <Folder selected={child.id === this.props.selectedFolder}
-                                             selectedFolder={this.props.selectedFolder}
-                                             key={child.id} onFolderSelect={this.props.onFolderSelect}
-                                             offset={childOffset} indent={this.props.indent} folder={child}
-                                             path={`${this.props.path}/${child.name}`}
-                            />
-                        )
-                        : ""
-                }
-            </div>
-        </Link>
-            ;
+                </div>
+            </Link>
+            {
+                this.state.expanded ?
+                    this.props.folder.children.map(
+                        child => <Folder selected={child.id === this.props.selectedFolder}
+                                         selectedFolder={this.props.selectedFolder}
+                                         key={child.id} onFolderSelect={this.props.onFolderSelect}
+                                         offset={childOffset} indent={this.props.indent} folder={child}
+                                         path={`${this.props.path}/${child.name}`}
+                        />
+                    )
+                    : ""
+            }
+        </>;
     }
 }
 
