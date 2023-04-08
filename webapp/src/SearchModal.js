@@ -2,6 +2,7 @@ import React, {Component} from "react";
 
 import "./Modal.css";
 import "./SearchModal.css";
+import "./Common.css";
 import axios from "axios";
 import Card from "./Card";
 
@@ -9,9 +10,10 @@ class SearchModal extends Component {
     static SEARCH_TYPING_DELAY = 200;
 
     state = {
+        show: false,
         mouseInside: false,
         results: [],
-        typingTimeoutID: null,
+        typingTimer: null,
     }
 
     onMouseMovement = (inside) => {
@@ -20,7 +22,14 @@ class SearchModal extends Component {
 
     onKeyDown = (e) => {
         if (e.key === "Escape") {
-            this.props.onExit();
+            const show = false;
+            const results = [];
+            this.setState({show, results});
+        } else if (e.ctrlKey && e.key === "k") {
+            e.preventDefault();
+            const show = !this.state.show;
+            const results = [];
+            this.setState({show, results});
         }
     }
 
@@ -35,8 +44,8 @@ class SearchModal extends Component {
     onQueryTyped = (e) => {
         const newQuery = e.target.value;
 
-        if (this.state.typingTimeoutID) {
-            clearTimeout(this.state.typingTimeoutID);
+        if (this.state.typingTimer) {
+            clearTimeout(this.state.typingTimer);
         }
 
         const typingTimeoutID = setTimeout(async () => {
@@ -51,24 +60,29 @@ class SearchModal extends Component {
     }
 
     render() {
-        return <div className="modal-container" onClick={this.props.onExit} onKeyDown={this.onKeyDown}>
-            <div
-                className="search-modal"
-                onClick={event => event.stopPropagation()}
-                onMouseOver={_ => this.onMouseMovement(true)}
-                onMouseLeave={_ => this.onMouseMovement(false)}
-            >
-                <div id="search-input-container">
-                    <img src="/icons/search-50.png" alt="search-icon" width={20}/>
-                    <input autoComplete={"off"} autoFocus onChange={this.onQueryTyped} placeholder="Search or jump to" id="search-input"/>
+        if (this.state.show) {
+            return <div className="modal-container">
+                <div
+                    className="search-modal"
+                    onClick={event => event.stopPropagation()}
+                    onMouseOver={_ => this.onMouseMovement(true)}
+                    onMouseLeave={_ => this.onMouseMovement(false)}
+                >
+                    <div id="search-input-container">
+                        <img src="/icons/search-50.png" alt="search-icon" width={20}/>
+                        <input autoComplete={"off"} autoFocus onChange={this.onQueryTyped}
+                               placeholder="Search or jump to"
+                               id="search-input"/>
+                    </div>
+                    <div className="separator"></div>
+                    <div id="search-results-container">
+                        {
+                            this.state.results.map(result => <SearchResult key={result.id} result={result}/>)
+                        }
+                    </div>
                 </div>
-                <div>
-                    {
-                        this.state.results.map(result => <SearchResult key={result.id} result={result}/>)
-                    }
-                </div>
-            </div>
-        </div>;
+            </div>;
+        }
     }
 }
 

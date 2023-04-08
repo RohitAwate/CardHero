@@ -38,12 +38,17 @@
     color: #303030;
 }
 
+#search-results-container {
+    overflow-y: auto;
+}
+
 .search-result-anchor,
 .search-result-anchor:hover {
     text-decoration: none;
 }
 
 .search-result {
+    font-size: 1.1em;
     padding: 5px 20px;
     vertical-align: center;
     color: #404040;
