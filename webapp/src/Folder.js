@@ -10,8 +10,16 @@ class Folder extends Component {
     state = {expanded: false}
 
     updateExpansion = () => {
-        const thisFolderSelected = "/" + this.props.path === this.props.selectedFolder;
-        if (thisFolderSelected) {
+        /*
+            http://localhost:3000/folders/dev/hello/world2/a1
+
+            If the above URL is opened, then we should expand folders
+            dev, hello, world2 and a1. Hence, we match sub-paths with the selected path.
+         */
+
+        const folderPath = "/" + this.props.path + "/";
+        const thisFolderOnExpandedPath = this.props.selectedFolder.startsWith(folderPath);
+        if (thisFolderOnExpandedPath) {
             this.setState({expanded: true});
         }
     };
