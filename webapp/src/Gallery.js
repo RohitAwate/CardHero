@@ -8,7 +8,7 @@ import {useSearchParams} from "react-router-dom";
 import CardModal from "./CardModal";
 
 function Gallery(props) {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     return <GalleryMeta selectedFolder={props.selectedFolder} modalCardID={searchParams.get("card")}/>;
 }
 
