@@ -73,10 +73,18 @@ class Folder extends Component {
                                          path={`${this.props.path}/${child.name}`}
                         />
                     )
-                    : ""
+                    : <></>
             }
         </>;
     }
 }
 
-export default Folder;
+function EmptyFolder() {
+    return <div id="empty-folder-container">
+        <img src="/backgrounds/sleeping_dog.png" alt="Cute dog sleeping, vector art"/>
+        <h1>No cards in this folder.</h1>
+        <h3>Check sub-folders or add a new card.</h3>
+    </div>
+}
+
+export {Folder, EmptyFolder};

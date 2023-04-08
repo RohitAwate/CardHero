@@ -1,7 +1,7 @@
 import {Component} from "react";
 
 import "./FolderTreeView.css";
-import Folder from "./Folder";
+import {Folder} from "./Folder";
 import axios from "axios";
 
 class FolderTreeView extends Component {

@@ -6,6 +6,7 @@ import Card from "./Card";
 import axios from "axios";
 import {useSearchParams} from "react-router-dom";
 import CardModal from "./CardModal";
+import {EmptyFolder} from "./Folder";
 
 function Gallery(props) {
     const [searchParams] = useSearchParams();
@@ -17,6 +18,7 @@ class GalleryMeta extends Component {
         // Might seem redundant to store both an array and a map for cards
         // but need to retain the order and also have quick lookup by card ID.
         cards: [],
+        loaded: false,
         cardsIndex: {}
     };
 
@@ -29,7 +31,7 @@ class GalleryMeta extends Component {
                 this.state.cardsIndex[card.id] = card;
             }
 
-            this.setState({cards});
+            this.setState({cards, loaded: true});
         }
     }
 
@@ -46,7 +48,7 @@ class GalleryMeta extends Component {
         }
 
         if (this.props.selectedFolder !== prevProps.selectedFolder) {
-            this.setState({cards: []});
+            this.setState({cards: [], loaded: false});
             await this.refresh()
         }
     }
@@ -60,7 +62,7 @@ class GalleryMeta extends Component {
                 this.state.cards.length > 0 ?
                     this.state.cards.map(card => <Card selectedFolder={this.props.selectedFolder} key={card.id}
                                                        card={card}/>)
-                    : <Loader/>
+                    : this.state.loaded ? <EmptyFolder/> : <Loader/>
             }
             {
                 modalRequested ? <CardModal card={modalCard}/> : <></>

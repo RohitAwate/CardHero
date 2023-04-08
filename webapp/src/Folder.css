@@ -36,3 +36,25 @@
 
     opacity: 40%;
 }
+
+#empty-folder-container {
+    height: calc(100vh - 50px - 40px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#empty-folder-container > img {
+    height: 20vh;
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+#empty-folder-container > h1,
+#empty-folder-container > h3 {
+    margin: 5px;
+    font-weight: normal;
+    color: grey;
+}
