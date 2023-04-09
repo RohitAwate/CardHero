@@ -50,6 +50,9 @@
     height: 20vh;
     opacity: 0.8;
     margin-bottom: 20px;
+
+    pointer-events: none;
+    user-select: none;
 }
 
 #empty-folder-container > h1,
