@@ -24,7 +24,7 @@ class GalleryMeta extends Component {
     };
 
     async refresh() {
-        const resp = await axios.get(`/api/rohit/cards/${this.props.selectedFolder}`);
+        const resp = await axios.get(`/api/rohit/cards${this.props.selectedFolder}`);
         if (resp.status === 200) {
             const cards = resp.data;
 
