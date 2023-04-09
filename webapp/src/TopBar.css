@@ -11,4 +11,6 @@
 
 #top-bar > p {
     font-size: 1.45em;
+    user-select: none;
+    pointer-events: none;
 }
