@@ -26,14 +26,14 @@
     position: absolute;
     right: 0;
     margin: 10px 10px 0 0;
-    padding: 0 0 15px 15px;
+    padding: 0 0 10px 10px;
     border-radius: 0 0 0 50px;
     background-color: #fff;
     box-shadow: -5px 5px 15px white;
 }
 
 .card-modal-nav-bar > .transparent-btn > img {
-    width: 2.1em;
+    width: 1.5em;
     opacity: 0.45;
 }
 
