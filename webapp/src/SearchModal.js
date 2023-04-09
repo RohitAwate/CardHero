@@ -51,7 +51,8 @@ class SearchModal extends Component {
     }
 
     onClickOutside = (e) => {
-        if (this.modalRef && !this.modalRef.current.contains(e.target)) {
+        // First check is for when the search modal is not showing.
+        if (this.modalRef.current && !this.modalRef.current.contains(e.target)) {
             return this.hideSearch();
         }
     }
