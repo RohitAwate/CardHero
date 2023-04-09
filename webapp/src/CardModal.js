@@ -103,7 +103,7 @@ class CardModalMeta extends Component {
                 <div className="card-modal-nav-bar">
                     {
                         this.state.mouseInside ?
-                            <Link to=".." relative="path" className="transparent-btn">
+                            <Link to="." relative="path" className="transparent-btn">
                                 <img src="/icons/close-cross-48.png" alt="close-cross-icon"/>
                             </Link> : ""
                     }
