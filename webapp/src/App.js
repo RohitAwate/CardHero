@@ -6,10 +6,16 @@ import Explorer from "./Explorer";
 import SearchModal from "./SearchModal";
 
 class App extends Component {
+    state = {lastUpdated: Date.now()}
+
+    update = () => {
+        this.setState({lastUpdated: Date.now()})
+    }
+
     render() {
         return <div id="app-container">
             <Explorer/>
-            <Chat/>
+            <Chat updateApp={this.update}/>
             <SearchModal/>
         </div>;
     }

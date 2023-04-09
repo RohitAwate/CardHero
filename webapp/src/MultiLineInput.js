@@ -8,6 +8,7 @@ class MultiLineInput extends Component {
     }
 
     reset = () => {
+        this.inputRef.current.innerText = "";
         this.inputValue = "";
         this.setState({});
     }
