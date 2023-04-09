@@ -88,7 +88,7 @@ class Folder extends Component {
 }
 
 function EmptyFolder() {
-    return <div id="empty-folder-container">
+    return <div id="empty-folder-container" className="non-selectable">
         <img src="/backgrounds/sleeping_dog.png" alt="Cute dog sleeping, vector art"/>
         <h1>No cards in this folder.</h1>
         <h3>Check sub-folders or add a new card.</h3>

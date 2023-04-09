@@ -32,3 +32,8 @@ a:hover {
     background-color: #eee;
     height: 2px;
 }
+
+.non-selectable {
+    user-select: none;
+    pointer-events: none;
+}
