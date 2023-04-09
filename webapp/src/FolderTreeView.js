@@ -28,6 +28,9 @@ class FolderTreeView extends Component {
             setTimeout(async () => {
                 await this.refresh()
             }, 500);
+        } else if (this.props.selectedFolder !== prevProps.selectedFolder) {
+            await this.refresh();
+
         }
     }
 

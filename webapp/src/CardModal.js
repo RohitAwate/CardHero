@@ -55,8 +55,29 @@ class CardModalMeta extends Component {
         }
     }
 
+    setPageTitle = () => {
+        if (!this.props.card) {
+            return;
+        }
+
+        const card = this.props.card;
+
+        // If longer than n characters, shorten them.
+        const n = 20;
+
+        let cardContentsForTitle;
+        if (card.contents.length > n) {
+            cardContentsForTitle = card.contents.substring(0, n) + "...";
+        } else {
+            cardContentsForTitle = card.contents + "...";
+        }
+
+        document.title = cardContentsForTitle + " | CardHero";
+    }
+
     render() {
         const card = this.props.card;
+        this.setPageTitle();
 
         let linkPath = "/folders";
         const folderPath = this.props.folderPath.map((folder, i, row) => {

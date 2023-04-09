@@ -9,7 +9,13 @@ import {Navigate, Route, Routes, useLocation} from "react-router-dom";
 class Explorer extends Component {
     DEFAULT_FOLDER = "/folders/Default";
 
+    setPageTitle = () => {
+
+    }
+
     render() {
+        this.setPageTitle();
+
         return <div id="card-explorer">
             <TopBar/>
             <div id="card-explorer-main">
@@ -28,6 +34,11 @@ function ExplorerMeta(props) {
 
     // Grab the path and strip away the "/folders" part
     const selectedFolder = location.pathname.substring("/folders".length);
+
+    // Update page title
+    const folders = selectedFolder.split("/");
+    const currentFolder = folders[folders.length - 1];
+    document.title = currentFolder + " | CardHero";
 
     return <>
         <LeftPane lastUpdated={props.lastUpdated} selectedFolder={selectedFolder}/>
