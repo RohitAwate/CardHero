@@ -14,7 +14,7 @@ class App extends Component {
 
     render() {
         return <div id="app-container">
-            <Explorer/>
+            <Explorer lastUpdated={this.state.lastUpdated} />
             <Chat updateApp={this.update}/>
             <SearchModal/>
         </div>;

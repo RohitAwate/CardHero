@@ -21,8 +21,14 @@ class FolderTreeView extends Component {
     }
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        // TODO: Refresh only if folders have changed
-        // await this.refresh();
+        if (this.props.lastUpdated !== prevProps.lastUpdated) {
+            // This is usually called when a new card is added.
+            // It might take about a second for the card to be fully ingested.
+            // Thus, delaying the update.
+            setTimeout(async () => {
+                await this.refresh()
+            }, 500);
+        }
     }
 
     render() {

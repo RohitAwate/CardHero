@@ -10,7 +10,8 @@ import {EmptyFolder} from "./Folder";
 
 function Gallery(props) {
     const [searchParams] = useSearchParams();
-    return <GalleryMeta selectedFolder={props.selectedFolder} modalCardID={searchParams.get("card")}/>;
+    return <GalleryMeta selectedFolder={props.selectedFolder} modalCardID={searchParams.get("card")}
+                        lastUpdated={props.lastUpdated}/>;
 }
 
 class GalleryMeta extends Component {
@@ -47,7 +48,14 @@ class GalleryMeta extends Component {
             }
         }
 
-        if (this.props.selectedFolder !== prevProps.selectedFolder) {
+        if (this.props.lastUpdated !== prevProps.lastUpdated) {
+            // This is usually called when a new card is added.
+            // It might take about a second for the card to be fully ingested.
+            // Thus, delaying the update.
+            setTimeout(async () => {
+                await this.refresh()
+            }, 250);
+        } else if (this.props.selectedFolder !== prevProps.selectedFolder) {
             this.setState({cards: [], loaded: false});
             await this.refresh()
         }

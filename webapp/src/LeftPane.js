@@ -4,7 +4,7 @@ import FolderTreeView from "./FolderTreeView";
 
 function LeftPane(props) {
     return <div id="left-pane">
-        <FolderTreeView selectedFolder={props.selectedFolder}/>
+        <FolderTreeView lastUpdated={props.lastUpdated} selectedFolder={props.selectedFolder}/>
     </div>;
 }
 
