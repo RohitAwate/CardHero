@@ -29,10 +29,22 @@ class SearchModal extends Component {
         this.setState({show, results});
     }
 
+    shortcutTriggered(e) {
+        return (
+            /*
+             Ctrl on Windows and Linux
+             Cmd on Mac (called Meta key)
+             On Windows and Linux, Super and Windows keys won't
+             register as meta keys which is nice.
+            */
+            e.ctrlKey || e.metaKey
+        ) && e.key === "k";
+    }
+
     onKeyDown = (e) => {
         if (e.key === "Escape") {
             this.hideSearch();
-        } else if (e.ctrlKey && e.key === "k") {
+        } else if (this.shortcutTriggered(e)) {
             e.preventDefault();
             const show = !this.state.show;
             const results = [];
