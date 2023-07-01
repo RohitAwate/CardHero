@@ -5,6 +5,8 @@ import "./CardModal.css";
 import Card from "./Card";
 import {Link, useSearchParams} from "react-router-dom";
 import Loader from "./Loader";
+import AddTextToClipboard from "./services/Clipboard";
+import axios from "axios";
 
 function CardModal(props) {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -122,9 +124,30 @@ class CardModalMeta extends Component {
                                 : <Loader size={30}/>
                         }
                     </p>
+                    <div className="card-modal-interactions-container">
+                        <button onClick={async _ => AddTextToClipboard(await CardModalMeta.getCardPermalink(card.id))}
+                                className="permalink-copy-btn transparent-btn">
+                            <img src="/icons/permalink-50.png" alt="permalink-icon"/>
+                        </button>
+                        <button onClick={_ => AddTextToClipboard(card.contents)}
+                                className="contents-copy-btn transparent-btn">
+                            <img src="/icons/copy-48.png" alt="copy-icon"/>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>;
+    }
+
+    static async getCardPermalink(uuid) {
+        const apiURL = `/api/rohit/card/goto/${uuid}`;
+        const resp = await axios.get(apiURL);
+        if (resp.status !== 200) {
+            alert("Could not get permalink for the card");
+            return;
+        }
+
+        return `${window.location.origin}${resp.data}`;
     }
 }
 

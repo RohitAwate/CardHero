@@ -87,6 +87,23 @@
     text-decoration: underline;
 }
 
+.card-modal-interactions-container {
+    display: flex;
+}
+
+.card-modal-interactions-container > .transparent-btn {
+    border: none;
+    display: flex;
+}
+
+.card-modal-interactions-container > .permalink-copy-btn > img {
+    width: 21px;
+}
+
+.card-modal-interactions-container > .contents-copy-btn > img {
+    width: 20px;
+}
+
 .card-modal-bottom-bar > .timestamp {
     padding: 0;
 }
