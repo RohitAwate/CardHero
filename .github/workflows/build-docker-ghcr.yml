@@ -21,11 +21,11 @@ jobs:
       run: |
         cd ${{ matrix.component }}
         docker build -t cardhero-${{matrix.component}}-${{ steps.git_hash.outputs.git_hash }} .
-        docker tag cardhero-${{matrix.component}}-${{ steps.git_hash.outputs.git_hash }} ${IMAGE}:latest
+        docker tag cardhero-${{matrix.component}}-${{ steps.git_hash.outputs.git_hash }} cardhero-${{matrix.component}}:latest
       
     - name: Login to GHCR
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     - name: Push the Docker image to GHCR
       run: |
-        docker push ghcr.io/rohitawate/cardhero-${{ matrix.component }}:${{ steps.git_hash.outputs.git_hash }}
+        docker push ghcr.io/rohitawate/cardhero-${{matrix.component}}:latest
