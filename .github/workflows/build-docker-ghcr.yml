@@ -16,6 +16,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      
+    - name: Set Git hash variable
+      id: git_hash
+      run: echo "::set-output name=git_hash::$(git rev-parse --short HEAD)"
 
     - name: Build the Docker image
       run: |
