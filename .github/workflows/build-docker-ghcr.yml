@@ -20,11 +20,12 @@ jobs:
     - name: Build the Docker image
       run: |
         cd ${{ matrix.component }}
-        docker build . --file Dockerfile --tag cardhero-${{ matrix.component }}:${{ steps.git_hash.outputs.git_hash }}
+        docker build -t ${IMAGE}:${{ steps.git_hash.outputs.git_hash }} .
+        docker tag ${IMAGE}:${{ steps.git_hash.outputs.git_hash }} ${IMAGE}:latest
       
     - name: Login to GHCR
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     - name: Push the Docker image to GHCR
       run: |
-        docker push ghcr.io/awate/cardhero-${{ matrix.component }}:${{ steps.git_hash.outputs.git_hash }}
+        docker push ghcr.io/rohitawate/cardhero-${{ matrix.component }}:${{ steps.git_hash.outputs.git_hash }}
