@@ -19,7 +19,7 @@ jobs:
       
     - name: Set Git hash variable
       id: git_hash
-      run: echo "git_hash=$(git rev-parse --short HEAD)" >> GITHUB_STATE
+      run: echo "git_hash=$(git rev-parse --short HEAD)" >> GITHUB_OUTPUT
 
     - name: Build the Docker image
       run: |
