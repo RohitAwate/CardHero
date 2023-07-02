@@ -1,0 +1,30 @@
+name: Build Docker images and push to GHCR
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [backend, webapp]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Build the Docker image
+      run: |
+        cd ${{ matrix.component }}
+        docker build . --file Dockerfile --tag cardhero-${{ matrix.component }}:$(date +%s)
+      
+    - name: Login to GHCR
+      run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Push the Docker image to GHCR
+      run: |
+        docker push ghcr.io/${{ github.repository_owner }}/cardhero-${{ matrix.component }}:$(date +%s)
