@@ -18,6 +18,9 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Install OpenSSL
 RUN apk update && apk add openssl
 
+# Create directory for NGINX SSL/TLS certificates
+RUN mkdir -p /etc/nginx/ssl
+
 # Generate SSL/TLS certificate
 RUN openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
     -subj "/C=US/ST=California/L=Walnut Creek/O=CardHero/CN=cardhero.awate.in" \
