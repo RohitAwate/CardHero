@@ -14,6 +14,7 @@ class SearchModal extends Component {
         show: false,
         mouseInside: false,
         results: [],
+        queryEmpty: true,
         typingTimer: null,
     }
 
@@ -26,7 +27,8 @@ class SearchModal extends Component {
     hideSearch = () => {
         const show = false;
         const results = [];
-        this.setState({show, results});
+        const queryEmpty = true;
+        this.setState({show, results, queryEmpty});
     }
 
     shortcutTriggered(e) {
@@ -80,7 +82,8 @@ class SearchModal extends Component {
             const resp = await axios.get("/api/rohit/search", {params: {query: newQuery}});
             if (resp.status === 200) {
                 const results = resp.data;
-                this.setState({results})
+                const queryEmpty = newQuery === "";
+                this.setState({results, queryEmpty})
             }
         }, SearchModal.SEARCH_TYPING_DELAY);
 
@@ -106,19 +109,32 @@ class SearchModal extends Component {
                     <div className="separator"></div>
                     <div id="search-results-container">
                         {
-                            this.state.results.map(result => <SearchResult hideSearch={this.hideSearch} key={result.id}
-                                                                           result={result}/>)
+                            this.state.results.length > 0 ?
+                                this.state.results.map(result =>
+                                    <SearchResult
+                                        hideSearch={this.hideSearch}
+                                        key={result.id}
+                                        result={result}
+                                    />
+                                )
+                                : (this.state.queryEmpty ? "" : this.NO_SEARCH_RESULTS)
                         }
                     </div>
                 </div>
             </div>;
         }
     }
+
+    NO_SEARCH_RESULTS = <SearchResult
+        hideSearch={this.hideSearch}
+        noTimestamp
+        result={{contents: "No results found."}}
+    />;
 }
 
 function SearchResult(props) {
     const result = props.result;
-    const formattedTime = Card.renderTimestamp(result.timestamp);
+    const formattedTime = props.noTimestamp ? "" : Card.renderTimestamp(result.timestamp);
     const navigate = useNavigate();
 
     const onClickHandler = async (e) => {
