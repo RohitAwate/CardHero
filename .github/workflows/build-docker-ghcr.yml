@@ -16,15 +16,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
-    - name: Set Git hash variable
-      run: echo "git_hash=$(git rev-parse --short HEAD)" >> GITHUB_OUTPUT
 
     - name: Build the Docker image
       run: |
         cd ${{ matrix.component }}
-        docker build -t ghcr.io/rohitawate/cardhero-${{matrix.component}}-$GITHUB_OUTPUT .
-        docker tag ghcr.io/rohitawate/cardhero-${{matrix.component}}-$GITHUB_OUTPUT ghcr.io/rohitawate/cardhero-${{matrix.component}}:latest
+        docker build -t ghcr.io/rohitawate/cardhero-${{matrix.component}}-${{ github.sha }} .
+        docker tag ghcr.io/rohitawate/cardhero-${{matrix.component}}-${{ github.sha }} ghcr.io/rohitawate/cardhero-${{matrix.component}}:latest
       
     - name: Login to GHCR
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
