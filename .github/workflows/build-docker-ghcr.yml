@@ -27,4 +27,4 @@ jobs:
 
     - name: Push the Docker image to GHCR
       run: |
-        docker push ghcr.io/${{ github.repository_owner }}/cardhero-${{ matrix.component }}:$(date +%s)
+        docker push ghcr.io/awate/cardhero-${{ matrix.component }}:$(date +%s)
