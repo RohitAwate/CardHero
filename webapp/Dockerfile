@@ -13,6 +13,6 @@ FROM caddy:2.6-alpine as deploy
 
 COPY --from=build /app/build /usr/share/caddy/html
 
-COPY Caddyfile /etc/Caddyfile
+COPY Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 443
