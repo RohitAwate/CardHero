@@ -7,7 +7,7 @@ cardhero.awate.in {
 
 	handle {
 		root * /usr/share/caddy/html
-		try_files {path}/index.html
+		try_files {path} /index.html
 		file_server
 	}
 }
