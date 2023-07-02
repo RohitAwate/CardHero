@@ -15,6 +15,14 @@ COPY --from=build /app/build /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+# Install OpenSSL
+RUN apk update && apk add openssl
+
+# Generate SSL/TLS certificate
+RUN openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
+    -subj "/C=US/ST=California/L=Walnut Creek/O=CardHero/CN=cardhero.awate.in" \
+    -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt
+
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
