@@ -12,11 +12,22 @@ class Chat extends Component {
         timestamp: new Date().toISOString()
     };
 
-    constructor(props) {
-        super(props);
-        this.inputRef = React.createRef();
-        this.bottomFocusRef = React.createRef();
-        this.state = {logs: []}
+    state = {
+        logs: []
+    }
+
+    inputRef = React.createRef();
+    bottomFocusRef = React.createRef();
+
+    createNewCard = async (contents) => {
+        const payload = new URLSearchParams();
+        payload.append('contents', contents);
+        payload.append('timestamp', new Date().toISOString());
+
+        const resp = await axios.post("/api/rohit/logs", payload);
+        if (resp.status === 201) {
+            return resp.data;
+        }
     }
 
     onSubmit = async (event) => {
@@ -24,12 +35,14 @@ class Chat extends Component {
         const contents = this.inputRef.current.value();
         if (contents.trim() === "") return;
 
-        const newCard = await this.props.onNewCard(contents);
+        const newCard = await this.createNewCard(contents);
         if (newCard !== null) {
             const logs = this.state.logs;
             logs.push(newCard);
             this.setState({logs: logs});
+
             this.inputRef.current.reset();
+            this.props.updateApp();
         }
     }
 

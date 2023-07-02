@@ -1,5 +1,5 @@
 * {
-    font-family: sans-serif;
+    font-family: Inter, sans-serif;
 }
 
 body {
@@ -10,4 +10,8 @@ body {
 #app-container {
     width: 100%;
     display: flex;
+}
+
+a, a:hover {
+    text-decoration: none;
 }

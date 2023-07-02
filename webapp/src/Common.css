@@ -27,3 +27,13 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+.separator {
+    background-color: #eee;
+    height: 2px;
+}
+
+.non-selectable {
+    user-select: none;
+    pointer-events: none;
+}

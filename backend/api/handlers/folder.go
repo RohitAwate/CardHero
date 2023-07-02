@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	uuid "github.com/satori/go.uuid"
-	"io"
 	"net/http"
 )
 
@@ -55,7 +53,7 @@ func GetFolders(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetCardsFromFolder(w http.ResponseWriter, r *http.Request) {
+func GetCardsFromFolderPath(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	user, err := db.GetUser(username)
 	if err != nil {
@@ -63,15 +61,23 @@ func GetCardsFromFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	folderIDStr := chi.URLParam(r, "folderID")
-	folderID, err := uuid.FromString(folderIDStr)
+	path := chi.URLParam(r, "*")
+
+	if path == "" {
+		// Requests for root are interpreted as those for the Default folder
+		path = models.DefaultFolderName
+	}
+
+	// Append the root folder name to the string
+	path = fmt.Sprintf("%s/%s", models.RootFolderName, path)
+
+	folder, err := db.ResolveFolder(path, *user)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		io.WriteString(w, "Invalid folder ID")
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
-	cards, err := db.GetCardsInFolder(folderID, *user)
+	cards, err := db.GetCardsInFolder(folder.ID, *user)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return

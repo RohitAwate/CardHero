@@ -5,6 +5,8 @@ import (
 	"CardHero/models"
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
+	uuid "github.com/satori/go.uuid"
+	"io"
 	"net/http"
 	"time"
 )
@@ -44,6 +46,42 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetCardByID(w http.ResponseWriter, r *http.Request) {
+	username := chi.URLParam(r, "username")
+	user, err := db.GetUser(username)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	cardIDStr := chi.URLParam(r, "cardID")
+	cardID, err := uuid.FromString(cardIDStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, "Invalid folder ID")
+		return
+	}
+
+	card, err := db.GetCardByID(*user, cardID)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	cardJSON, err := json.Marshal(card)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Add("content-type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(cardJSON)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
 func AddCard(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	contents := r.FormValue("contents")
@@ -68,6 +106,48 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(cardJson)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+func GetFolderPathByCardID(w http.ResponseWriter, r *http.Request) {
+	username := chi.URLParam(r, "username")
+	user, err := db.GetUser(username)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	cardIDStr := chi.URLParam(r, "cardID")
+	cardID, err := uuid.FromString(cardIDStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, "Invalid folder ID")
+		return
+	}
+
+	card, err := db.GetCardByID(*user, cardID)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	folderPath, err := db.GetFolderPathByID(card.FolderID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	redirectLocation := "/folders"
+	for _, folder := range folderPath {
+		redirectLocation += "/" + folder
+	}
+	redirectLocation += "?card=" + cardIDStr
+
+	w.Header().Add("content-type", "text/plain")
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write([]byte(redirectLocation))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}

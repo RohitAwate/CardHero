@@ -1,3 +1,9 @@
+.chat-bubble-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 .chat-bubble {
     min-width: 10vh;
     max-width: 85%;
@@ -11,6 +17,17 @@
 
     /* x-offset y-offset blur-radius color */
     box-shadow: 0 1px 2px #81987f;
+}
+
+.chat-bubble-container .transparent-btn {
+    opacity: 0;
+    width: 48px;
+    height: 48px;
+}
+
+.chat-bubble-container:hover .transparent-btn {
+    opacity: 1;
+    transition: opacity 500ms;
 }
 
 .chat-bubble-contents {

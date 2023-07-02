@@ -26,14 +26,14 @@
     position: absolute;
     right: 0;
     margin: 10px 10px 0 0;
-    padding: 0 0 15px 15px;
+    padding: 0 0 10px 10px;
     border-radius: 0 0 0 50px;
     background-color: #fff;
     box-shadow: -5px 5px 15px white;
 }
 
 .card-modal-nav-bar > .transparent-btn > img {
-    width: 2.1em;
+    width: 1.5em;
     opacity: 0.45;
 }
 
@@ -80,6 +80,28 @@
 .folder-link {
     font-size: 0.85em;
     margin: 0 3px;
+}
+
+.folder-link:hover {
+    color: #666;
+    text-decoration: underline;
+}
+
+.card-modal-interactions-container {
+    display: flex;
+}
+
+.card-modal-interactions-container > .transparent-btn {
+    border: none;
+    display: flex;
+}
+
+.card-modal-interactions-container > .permalink-copy-btn > img {
+    width: 21px;
+}
+
+.card-modal-interactions-container > .contents-copy-btn > img {
+    width: 20px;
 }
 
 .card-modal-bottom-bar > .timestamp {
