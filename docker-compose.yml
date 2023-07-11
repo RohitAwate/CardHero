@@ -8,10 +8,11 @@ services:
     depends_on:
       - redis
       - pg
+      - ml
     networks:
       - cardhero-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://backend:8080"]
+      test: [ "CMD", "curl", "-f", "http://backend:8080" ]
       interval: 1m
       timeout: 10s
       retries: 3
@@ -26,7 +27,17 @@ services:
     networks:
       - cardhero-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://webapp"]
+      test: [ "CMD", "curl", "-f", "http://webapp" ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+  ml:
+    image: "ghcr.io/rohitawate/cardhero-ml:latest"
+    networks:
+      - cardhero-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://ml:8000" ]
       interval: 1m
       timeout: 10s
       retries: 3
@@ -42,7 +53,7 @@ services:
     networks:
       - cardhero-net
     healthcheck:
-      test: ["CMD", "pg_isready", "-h", "pg"]
+      test: [ "CMD", "pg_isready", "-h", "pg" ]
       interval: 1m
       timeout: 10s
       retries: 3
@@ -52,7 +63,7 @@ services:
     networks:
       - cardhero-net
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 1m
       timeout: 10s
       retries: 3
