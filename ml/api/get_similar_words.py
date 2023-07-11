@@ -1,13 +1,11 @@
 import nltk
+from gensim.models import KeyedVectors
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from gensim.models import KeyedVectors
-
-nltk.download('punkt')
-nltk.download('stopwords')
 
 # Load the pre-trained word2vec model
-model = KeyedVectors.load_word2vec_format('./models/word2vec_model.bin', binary=True)
+model = KeyedVectors.load_word2vec_format('/models/word2vec-google-news-300/model', binary=True)
+
 
 def extract_keywords(text, n=5):
     stop_words = set(stopwords.words('english'))
@@ -16,6 +14,7 @@ def extract_keywords(text, n=5):
     freq_dist = nltk.FreqDist(filtered_tokens)
     keywords = [token for token, _ in freq_dist.most_common(n)]
     return keywords
+
 
 def get_similar_words(text: str, n: int = 5):
     keywords = extract_keywords(text, n)

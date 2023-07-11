@@ -4,26 +4,22 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV GENSIM_DATA_DIR /models
 
-RUN apt-get update \
-    && apt-get -y install netcat gcc \
-    && apt-get clean
+# Install build essentials such as gcc
+RUN apk add build-base gzip
 
-RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # Download the Google News word embeddings model
-RUN mkdir -p models
-RUN wget -O models/GoogleNews-vectors-negative300.bin.gz \
-    --load-cookies /tmp/cookies.txt \
-    "https://drive.google.com/uc?export=download&confirm= \
-    $(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate \
-    'https://drive.google.com/uc?export=download&id=0B7XkCwpI5KDYNlNUTTlSS21pQmM' -O- \
-    | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=0B7XkCwpI5KDYNlNUTTlSS21pQmM" \
-    && rm -rf /tmp/cookies.txt
-RUN gzip -d models/GoogleNews-vectors-negative300.bin.gz \
-    && mv models/GoogleNews-vectors-negative300.bin models/word2vec_model.bin \
-    && rm models/GoogleNews-vectors-negative300.bin.gz
+RUN python -m gensim.downloader --download word2vec-google-news-300
+RUN gzip -d /models/word2vec-google-news-300/word2vec-google-news-300.gz
+RUN mv /models/word2vec-google-news-300/word2vec-google-news-300 /models/word2vec-google-news-300/model
+
+RUN python -m nltk.downloader punkt stopwords
 
 COPY . .
+
+EXPOSE 8000
+ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0"]
