@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 model = KeyedVectors.load_word2vec_format('/models/word2vec-google-news-300/model', binary=True)
 
 
-def extract_keywords(text, n=5):
+def extract_keywords(text: str, n: int = 5):
     stop_words = set(stopwords.words('english'))
     word_tokens = word_tokenize(text.lower())
     filtered_tokens = [token for token in word_tokens if token.isalnum() and token not in stop_words]
