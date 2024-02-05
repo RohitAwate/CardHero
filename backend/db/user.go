@@ -38,7 +38,31 @@ func GetUserByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
-func SaveUser(user models.User) {
+const (
+	savePasswordQuery = `
+		UPDATE users
+		SET password = crypt(?, gen_salt('bf'))
+		WHERE username = ?;
+	`
+)
+
+func SaveUser(user models.User) error {
+	// Remove the password from the user since we will be hashing + salting it
+	password := user.Password
+	user.Password = ""
+
+	// Create user without password
 	conn := getConn()
-	conn.Create(&user)
+	err := conn.Create(&user).Error
+	if err != nil {
+		return err
+	}
+
+	// Hash and save the password
+	err = conn.Exec(savePasswordQuery, password, user.Username).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
