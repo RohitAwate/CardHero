@@ -11,9 +11,9 @@ type Card struct {
 	Timestamp time.Time `json:"timestamp" gorm:"not null"`
 
 	OwnerID  uuid.UUID `json:"-" gorm:"not null"`
-	Owner    User      `json:"-"`
+	Owner    User      `json:"-" gorm:"constraint:OnDelete:CASCADE"`
 	FolderID uuid.UUID `json:"-" gorm:"not null"`
-	Folder   Folder    `json:"-"`
+	Folder   Folder    `json:"-" gorm:"constraint:OnDelete:CASCADE"`
 
 	Contents       string `json:"contents,omitempty"`
 	SearchContents string `json:"-" gorm:"type:tsvector;index"`
