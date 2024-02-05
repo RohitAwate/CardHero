@@ -44,5 +44,11 @@ func SignUpUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create a new root folder for the new user
-	models.NewRoot(*user)
+	root := models.NewRoot(*user)
+	if err := db.SaveFolder(&root); err != nil {
+		errString := fmt.Sprintf("Error while creating root folder for new user: %s", err)
+		monitor.LogError(errString)
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }
