@@ -1,12 +1,12 @@
 package mq
 
 import (
+	"CardHero/monitoring"
 	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/redis/go-redis/v9"
 	uuid "github.com/satori/go.uuid"
-	"log"
 	"time"
 )
 
@@ -36,7 +36,8 @@ func init() {
 		DB:       0,
 	})
 
-	log.Println("Connected to Redis")
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("mq/mq.go#init()")
+	monitor.LogInfo("Connected to Redis")
 	ctx = context.Background()
 }
 
@@ -69,13 +70,15 @@ func (mq *MessageQueue) StartListenAndDispatch() {
 		}
 	}(sub)
 
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("MessageQueue#StartListenAndDispatch()")
+
 	for {
 		msg, err := sub.ReceiveMessage(ctx)
 		if err != nil {
-			log.Println(err)
+			monitor.LogError(err)
 			continue
 		}
 
-		fmt.Println(msg)
+		monitor.LogInfo(msg.String())
 	}
 }

@@ -3,7 +3,9 @@ package handlers
 import (
 	"CardHero/db"
 	"CardHero/models"
+	"CardHero/monitoring"
 	"encoding/json"
+	"fmt"
 	"github.com/go-chi/chi/v5"
 	uuid "github.com/satori/go.uuid"
 	"io"
@@ -89,7 +91,9 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 	timestamp, _ := time.Parse(time.RFC3339, timestampStr)
 
 	user, err := db.GetUser(username)
+	var logger monitoring.Monitor = monitoring.NewPrintMonitor("handlers/card.go#AddCard()")
 	if err != nil {
+		logger.LogCaution(fmt.Sprintf("User not found in database: @%s", username))
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

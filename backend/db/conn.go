@@ -2,10 +2,10 @@ package db
 
 import (
 	"CardHero/models"
+	"CardHero/monitoring"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
 	"os"
 )
 
@@ -29,18 +29,19 @@ func init() {
 		panic(err)
 	}
 
-	log.Println("Connected to database")
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("db/conn.go#init()")
+	monitor.LogInfo("Connected to database")
 
-	log.Println("Running auto-migrations")
+	monitor.LogInfo("Running auto-migrations")
 	err = database.AutoMigrate(models.GetAll()...)
 	if err != nil {
 		panic(err)
 	}
 
-	log.Println("Setting up triggers")
+	monitor.LogInfo("Setting up triggers")
 	models.SetupTriggers(database)
 
-	log.Println("Database initialized")
+	monitor.LogInfo("Database initialized")
 }
 
 func getConn() *gorm.DB {
