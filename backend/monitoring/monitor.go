@@ -10,6 +10,7 @@ const (
 	LogLevelCaution
 	LogLevelWarning
 	LogLevelError
+	LogLevelAlert
 )
 
 var LogLevelToString = map[uint]string{
@@ -17,6 +18,7 @@ var LogLevelToString = map[uint]string{
 	LogLevelCaution: "CAUTION",
 	LogLevelWarning: "WARN",
 	LogLevelError:   "ERROR",
+	LogLevelAlert:   "ALERT",
 }
 
 type Log struct {
@@ -34,7 +36,8 @@ type Monitor interface {
 	LogInfo(string)
 	LogCaution(string)
 	LogWarning(string)
-	LogError(error)
+	LogError(string)
+	LogAlert(string)
 }
 
 type PrintMonitor struct {
@@ -61,8 +64,29 @@ func (pm PrintMonitor) LogWarning(msg string) {
 	pm.log(LogLevelWarning, msg, pm.Operation)
 }
 
-func (pm PrintMonitor) LogError(err error) {
-	pm.log(LogLevelError, err.Error(), pm.Operation)
+func (pm PrintMonitor) LogError(msg string) {
+	pm.log(LogLevelError, msg, pm.Operation)
+}
+
+func (pm PrintMonitor) LogAlert(msg string) {
+	pm.log(LogLevelAlert, msg, pm.Operation)
+}
+
+func LogByLevel(monitor Monitor, logLevel uint, msg string) {
+	switch logLevel {
+	case LogLevelInfo:
+		monitor.LogInfo(msg)
+	case LogLevelCaution:
+		monitor.LogCaution(msg)
+	case LogLevelWarning:
+		monitor.LogWarning(msg)
+	case LogLevelError:
+		monitor.LogError(msg)
+	case LogLevelAlert:
+		monitor.LogAlert(msg)
+	default:
+		monitor.LogAlert(fmt.Sprintf("Invalid logging level %d used by monitor at %s [msg='%s']", logLevel, monitor.GetOperation(), msg))
+	}
 }
 
 func (pm PrintMonitor) log(level uint, message string, operation string) {

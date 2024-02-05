@@ -11,7 +11,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	query := r.URL.Query().Get("query")
 
-	user, err := db.GetUser(username)
+	user, err := db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return

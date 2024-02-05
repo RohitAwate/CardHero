@@ -75,7 +75,7 @@ func (mq *MessageQueue) StartListenAndDispatch() {
 	for {
 		msg, err := sub.ReceiveMessage(ctx)
 		if err != nil {
-			monitor.LogError(err)
+			monitor.LogError(err.Error())
 			continue
 		}
 

@@ -11,7 +11,7 @@ import (
 
 func GetFolders(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
-	user, err := db.GetUser(username)
+	user, err := db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -55,7 +55,7 @@ func GetFolders(w http.ResponseWriter, r *http.Request) {
 
 func GetCardsFromFolderPath(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
-	user, err := db.GetUser(username)
+	user, err := db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

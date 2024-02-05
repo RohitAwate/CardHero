@@ -15,7 +15,7 @@ import (
 
 func GetCards(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
-	user, err := db.GetUser(username)
+	user, err := db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -50,7 +50,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
 
 func GetCardByID(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
-	user, err := db.GetUser(username)
+	user, err := db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -90,10 +90,10 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 	timestampStr := r.FormValue("timestamp")
 	timestamp, _ := time.Parse(time.RFC3339, timestampStr)
 
-	user, err := db.GetUser(username)
-	var logger monitoring.Monitor = monitoring.NewPrintMonitor("handlers/card.go#AddCard()")
+	user, err := db.GetUserByUsername(username)
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("handlers/card.go#AddCard()")
 	if err != nil {
-		logger.LogCaution(fmt.Sprintf("User not found in database: @%s", username))
+		monitor.LogCaution(fmt.Sprintf("User not found in database: @%s", username))
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
@@ -117,7 +117,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 
 func GetFolderPathByCardID(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
-	user, err := db.GetUser(username)
+	user, err := db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
