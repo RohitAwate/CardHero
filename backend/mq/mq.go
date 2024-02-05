@@ -70,7 +70,7 @@ func (mq *MessageQueue) StartListenAndDispatch() {
 		}
 	}(sub)
 
-	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("MessageQueue#StartListenAndDispatch()")
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("mq/mq.go#StartListenAndDispatch()")
 
 	for {
 		msg, err := sub.ReceiveMessage(ctx)
