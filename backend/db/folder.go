@@ -33,10 +33,9 @@ func BuildFoldersFromCard(card *models.Card, owner models.User) {
 			folders := strings.Split(token, models.FolderDelimiter)
 
 			for _, folderName := range folders {
-				// This could happen if there are redundant slashes
-				//like so
-				// - //dev/jetbrains/goland/ -- the trailing slash here
-				// - ///recipes/pasta -- the 3 slashes at the start
+				// This could happen if there are redundant slashes like so:
+				// - //dev/jetbrains/goland/    -> the trailing slash here
+				// - ///recipes/pasta           -> the 3 slashes at the start
 				if folderName == "" {
 					continue
 				}
