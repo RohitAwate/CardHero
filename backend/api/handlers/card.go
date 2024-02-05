@@ -91,7 +91,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 	timestamp, _ := time.Parse(time.RFC3339, timestampStr)
 
 	user, err := db.GetUserByUsername(username)
-	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("handlers/card.go#AddCard()")
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("api/handlers/card.go#AddCard()")
 	if err != nil {
 		monitor.LogCaution(fmt.Sprintf("User not found in database: @%s", username))
 		w.WriteHeader(http.StatusUnauthorized)
