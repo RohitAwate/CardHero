@@ -10,10 +10,9 @@ import (
 
 func SignUpUser(w http.ResponseWriter, r *http.Request) {
 	// Username exists?
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("api/handlers/user.go#SignUpUser()")
 	username := r.FormValue("username")
-	_, err := db.GetUserByUsername(username)
-	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("handlers/user.go#SignUpUser()")
-	if err == nil {
+	if _, err := db.GetUserByUsername(username); err == nil {
 		errString := fmt.Sprintf("Username already exists: %s", username)
 		LogAndRespond(errString, w, http.StatusBadRequest, monitor, monitoring.LogLevelInfo)
 		return
@@ -21,8 +20,7 @@ func SignUpUser(w http.ResponseWriter, r *http.Request) {
 
 	// Email exists?
 	email := r.FormValue("email")
-	_, err = db.GetUserByEmail(email)
-	if err == nil {
+	if _, err := db.GetUserByEmail(email); err == nil {
 		errString := fmt.Sprintf("Account already exists with email: %s", email)
 		LogAndRespond(errString, w, http.StatusBadRequest, monitor, monitoring.LogLevelInfo)
 		return
@@ -39,7 +37,11 @@ func SignUpUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.SaveUser(*user)
+	if err = db.SaveUser(*user); err != nil {
+		errString := fmt.Sprintf("Error while saving user: %s", err)
+		LogAndRespond(errString, w, http.StatusInternalServerError, monitor, monitoring.LogLevelAlert)
+		return
+	}
 
 	// Create a new root folder for the new user
 	models.NewRoot(*user)

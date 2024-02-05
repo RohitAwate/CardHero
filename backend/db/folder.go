@@ -2,6 +2,7 @@ package db
 
 import (
 	"CardHero/models"
+	"CardHero/monitoring"
 	"fmt"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm/clause"
@@ -14,12 +15,17 @@ func IngestCard(card models.Card, user models.User) {
 	SaveCard(card)
 }
 
+var whitespaceRegex = regexp.MustCompile("\\s+")
+
 func BuildFoldersFromCard(card *models.Card, owner models.User) {
-	whitespaceRegex := regexp.MustCompile("\\s+")
 	tokens := whitespaceRegex.Split(card.Contents, -1)
 
 	root := models.NewRoot(owner)
-	SaveFolder(&root)
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("db/folder.go#BuildFoldersFromCard()")
+	if err := SaveFolder(&root); err != nil {
+		monitor.LogError(err.Error())
+		return
+	}
 
 	ch := make(chan models.Folder)
 	go CreateDefaultFolder(root, ch)
@@ -41,7 +47,10 @@ func BuildFoldersFromCard(card *models.Card, owner models.User) {
 				}
 
 				newFolder := models.NewFolder(folderName, &parent, owner)
-				SaveFolder(&newFolder)
+				if err := SaveFolder(&newFolder); err != nil {
+					monitor.LogError(err.Error())
+					break
+				}
 
 				parent = newFolder
 			}
@@ -57,8 +66,13 @@ func BuildFoldersFromCard(card *models.Card, owner models.User) {
 }
 
 func CreateDefaultFolder(root models.Folder, ch chan models.Folder) {
+	var monitor monitoring.Monitor = monitoring.NewPrintMonitor("db/folder.go#CreateDefaultFolder()")
 	defaultFolder := models.NewFolder("Default", &root, root.Owner)
-	SaveFolder(&defaultFolder)
+	if err := SaveFolder(&defaultFolder); err != nil {
+		monitor.LogError(err.Error())
+		return
+	}
+
 	ch <- defaultFolder
 }
 
@@ -168,20 +182,25 @@ func GetCardsInFolder(folderID uuid.UUID, owner models.User) ([]models.Card, err
 	return cards, nil
 }
 
-func SaveFolder(folder *models.Folder) {
+func SaveFolder(folder *models.Folder) error {
 	conn := getConn()
 
 	existingFolder, err := GetFolder(folder.Name, folder.Parent, folder.Owner)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return nil
 	}
 
 	if existingFolder.ID == uuid.Nil {
-		conn.Create(folder)
+		err := conn.Create(folder).Error
+		if err != nil {
+			return err
+		}
 	} else {
 		*folder = existingFolder
 	}
+
+	return nil
 }
 
 const (
@@ -217,6 +236,6 @@ func GetFolderPathByID(folderID uuid.UUID) ([]string, error) {
 		folders[i], folders[j] = folders[j], folders[i]
 	}
 
-	// Skipping "Root:
+	// Skipping root folder:
 	return folders[1:], nil
 }
