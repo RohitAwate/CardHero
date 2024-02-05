@@ -11,6 +11,8 @@ import (
 
 var database *gorm.DB
 
+const initPostgresCryptoExtension = "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+
 func init() {
 	host := os.Getenv("CH_PG_HOST")
 	port := os.Getenv("CH_PG_PORT")
@@ -40,6 +42,9 @@ func init() {
 
 	monitor.LogInfo("Setting up triggers")
 	models.SetupTriggers(database)
+
+	monitor.LogInfo("Setting up extensions")
+	database.Exec(initPostgresCryptoExtension)
 
 	monitor.LogInfo("Database initialized")
 }
