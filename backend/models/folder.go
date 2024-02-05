@@ -10,10 +10,10 @@ type Folder struct {
 	Name string `json:"name,omitempty" gorm:"uniqueIndex:unique_folder"`
 
 	ParentID *uuid.UUID `json:"-" gorm:"uniqueIndex:unique_folder"`
-	Parent   *Folder    `json:"parent,omitempty"`
+	Parent   *Folder    `json:"parent,omitempty" gorm:"constraint:OnDelete:CASCADE"`
 
 	OwnerID uuid.UUID `json:"-" gorm:"uniqueIndex:unique_folder"`
-	Owner   User      `json:"owner"`
+	Owner   User      `json:"owner" gorm:"constraint:OnDelete:CASCADE"`
 }
 
 func NewFolder(name string, parent *Folder, owner User) Folder {
