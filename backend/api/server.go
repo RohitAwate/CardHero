@@ -16,6 +16,7 @@ type Server struct {
 func NewServer(port uint) Server {
 	router := chi.NewRouter()
 	router.Route("/api", func(router chi.Router) {
+		router.Post("/signIn", handlers.SignInUser)
 		router.Post("/signUp", handlers.SignUpUser)
 
 		router.Route("/{username:[a-z1-2_]+}", func(router chi.Router) {

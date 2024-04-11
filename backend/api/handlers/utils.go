@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func LogAndRespond(errString string, w http.ResponseWriter, status int, monitor monitoring.Monitor, logLevel uint) {
+func LogAndRespond(errString string, monitor monitoring.Monitor, logLevel uint, w http.ResponseWriter, status int) {
 	// Respond to request
 	w.WriteHeader(status)
 

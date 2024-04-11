@@ -6,11 +6,12 @@ import (
 	"CardHero/monitoring"
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi/v5"
-	uuid "github.com/satori/go.uuid"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	uuid "github.com/satori/go.uuid"
 )
 
 func GetCards(w http.ResponseWriter, r *http.Request) {

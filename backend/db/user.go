@@ -3,6 +3,7 @@ package db
 import (
 	"CardHero/models"
 	"fmt"
+
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -33,6 +34,26 @@ func GetUserByEmail(email string) (*models.User, error) {
 
 	if user.ID == uuid.Nil {
 		return nil, fmt.Errorf("user not found with email: %s", email)
+	}
+
+	return &user, nil
+}
+
+const (
+	getUserByLoginCredentialsQuery = `
+		SELECT * FROM users
+		WHERE username = ?
+		AND password = crypt(?, password);
+	`
+)
+
+func GetUserByLoginCredentials(username, password string) (*models.User, error) {
+	conn := getConn()
+
+	var user models.User
+	err := conn.Raw(getUserByLoginCredentialsQuery, username, password).Scan(&user).Error
+	if err != nil {
+		return nil, err
 	}
 
 	return &user, nil

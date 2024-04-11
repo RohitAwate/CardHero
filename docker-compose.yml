@@ -1,64 +1,57 @@
 version: '3'
 
 services:
-  backend:
+  cardhero-backend:
     image: "ghcr.io/rohitawate/cardhero-backend:latest"
+    container_name: cardhero-backend
     env_file:
       - backend/docker.env
     depends_on:
-      - redis
-      - pg
-    networks:
-      - cardhero-net
+      - cardhero-redis
+      - cardhero-pg
     healthcheck:
       test: ["CMD", "curl", "-f", "http://backend:8080"]
       interval: 1m
       timeout: 10s
       retries: 3
 
-  webapp:
+  cardhero-webapp:
     image: "ghcr.io/rohitawate/cardhero-webapp:latest"
+    container_name: cardhero-webapp
     ports:
       - "443:443"
       - "80:80"
     depends_on:
-      - backend
-    networks:
-      - cardhero-net
+      - cardhero-backend
     healthcheck:
       test: ["CMD", "curl", "-f", "http://webapp"]
       interval: 1m
       timeout: 10s
       retries: 3
 
-  pg:
+  cardhero-pg:
     image: postgres:15.2-alpine
+    container_name: cardhero-pg
     env_file:
       - backend/docker.env
     ports:
       - "5588:5432"
     volumes:
-      - pg_db:/var/lib/postgresql/data
-    networks:
-      - cardhero-net
+      - cardhero-pg-vol:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-h", "pg"]
       interval: 1m
       timeout: 10s
       retries: 3
 
-  redis:
+  cardhero-redis:
     image: redis:7.0-alpine
-    networks:
-      - cardhero-net
+    container_name: cardhero-redis
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 1m
       timeout: 10s
       retries: 3
 
-networks:
-  cardhero-net:
-
 volumes:
-  pg_db:
+  cardhero-pg-vol:
